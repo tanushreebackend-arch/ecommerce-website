@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { adminApi } from '@/lib/api';
 import toast from 'react-hot-toast';
 import { Star } from 'lucide-react';
@@ -31,12 +31,14 @@ export default function ReviewsPage() {
   const [tab, setTab] = useState<'pending' | 'published'>('pending');
   const [reviews, setReviews] = useState<Review[]>([]);
 
-  const loadReviews = () => {
+  const loadReviews = useCallback(() => {
     const fn = tab === 'pending' ? adminApi.getPendingReviews : adminApi.getPublishedReviews;
     fn().then(setReviews).catch(console.error);
-  };
+  }, [tab]);
 
-  useEffect(() => { loadReviews(); }, [tab]);
+  useEffect(() => {
+    loadReviews();
+  }, [loadReviews]);
 
   const handleApprove = async (id: string) => {
     await adminApi.approveReview(id);

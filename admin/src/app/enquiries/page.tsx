@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { adminApi } from '@/lib/api';
 import toast from 'react-hot-toast';
 
@@ -18,8 +18,13 @@ export default function EnquiriesPage() {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [search, setSearch] = useState('');
 
-  const load = () => adminApi.getEnquiries(search).then(setEnquiries).catch(console.error);
-  useEffect(() => { load(); }, [search]);
+  const load = useCallback(() => {
+    adminApi.getEnquiries(search).then(setEnquiries).catch(console.error);
+  }, [search]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const toggleRead = async (id: string, isRead: boolean) => {
     await adminApi.markEnquiryRead(id, isRead);

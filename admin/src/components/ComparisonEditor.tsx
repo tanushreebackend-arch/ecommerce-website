@@ -40,12 +40,6 @@ export default function ComparisonEditor({ content, onChange }: ComparisonEditor
     onChange({ ...content, infographic: { ...infographic, [field]: value } });
   };
 
-  const updateLabel = (index: number, text: string) => {
-    const labels = [...(infographic.labels || [])];
-    labels[index] = { ...labels[index], text };
-    updateInfographic('labels', labels);
-  };
-
   const updateCategory = (index: number, field: keyof Category, value: unknown) => {
     const next = [...categories];
     next[index] = { ...next[index], [field]: value };
@@ -156,7 +150,7 @@ export default function ComparisonEditor({ content, onChange }: ComparisonEditor
 
       <div>
         <label className="text-sm font-semibold mb-2 block">Arrow Labels</label>
-        {LABEL_POSITIONS.map((position, i) => {
+        {LABEL_POSITIONS.map((position) => {
           const existing = (infographic.labels || []).find((l) => l.position === position);
           const labelIndex = (infographic.labels || []).findIndex((l) => l.position === position);
           return (

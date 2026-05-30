@@ -3,37 +3,21 @@
 import Image from 'next/image';
 import { Check } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
+import { useSection } from '@/hooks/useSection';
 import SectionHeading from '@/components/SectionHeading';
 import ScrollReveal from '@/components/ScrollReveal';
 
-const DEFAULT = {
-  heading: 'The NOW Foods Quality Standard',
-  paragraph:
-    'Since 1968, NOW Foods has been a leader in natural supplements — manufactured in GMP-certified facilities with rigorous quality testing.',
-  paragraph2:
-    'Every batch of SAMe 400 mg is stabilized for potency and delivered in a convenient maximum-strength dose your body can use.*',
-  bullets: [
-    'Stabilized SAMe for reliable potency and absorption.*',
-    'Supports neurotransmitter synthesis for mood and mental clarity.*',
-    'Helps maintain joint comfort from everyday strain.*',
-  ],
-  closing:
-    'Feel balanced from the inside out. Support your mood, mind, and movement with clinically studied SAMe — from a brand you can trust.',
-};
-
 export default function GoldStandard() {
+  const { content, isVisible } = useSection('goldStandard');
   const { settings } = useSettings();
-  const raw = settings?.sections?.goldStandard?.content as Record<string, unknown> | undefined;
   const product = settings?.product as Record<string, unknown> | undefined;
   const productImages = (product?.images as { url: string }[]) || [];
-  if (!raw) return null;
 
-  const isLegacy = String(raw.paragraph || '').includes('purest ingredients from trusted suppliers') || String(raw.paragraph || '').includes('Bee Bread');
-  const content: Record<string, unknown> = isLegacy
-    ? { ...DEFAULT, image: raw.image || productImages[1]?.url || productImages[0]?.url }
-    : { ...DEFAULT, ...raw };
-  const bullets = (content.bullets as string[]) || DEFAULT.bullets;
-  const sideImage = (content.image as string) || productImages[1]?.url || productImages[0]?.url;
+  if (!isVisible) return null;
+
+  const bullets = (content.bullets as string[]) || [];
+  const sideImage = (content.image as string) || productImages[1]?.url || productImages[0]?.url || '';
+  const sectionLabel = (content.sectionLabel as string) || 'QUALITY STANDARD';
 
   return (
     <section className="section-padding luxury-section-white">
@@ -41,25 +25,31 @@ export default function GoldStandard() {
         <div className="container-main">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
             <div>
-              <SectionHeading label="QUALITY STANDARD" centered={false}>
-                {content.heading as string}
+              <SectionHeading label={sectionLabel} centered={false}>
+                {(content.heading as string) || ''}
               </SectionHeading>
-              <p className="section-body-text mb-2 !max-w-none">{content.paragraph as string}</p>
+              {(content.paragraph as string) && (
+                <p className="section-body-text mb-2 !max-w-none">{content.paragraph as string}</p>
+              )}
               {(content.paragraph2 as string) && (
                 <p className="section-body-text mb-2 !max-w-none">{content.paragraph2 as string}</p>
               )}
-              <p className="section-label mb-2">These nutrients</p>
-              <ul className="space-y-2 mb-2">
-                {bullets.map((b, i) => (
-                  <li key={i} className="flex items-start gap-2.5 section-body-text !max-w-none">
-                    <Check size={14} strokeWidth={1.25} className="text-[var(--color-heading)] mt-1 shrink-0" />
-                    {b}
-                  </li>
-                ))}
-              </ul>
-              <p className="section-body-text italic !max-w-none">
-                {(content.closing as string) || DEFAULT.closing}
-              </p>
+              {(content.bulletLabel as string) && (
+                <p className="section-label mb-2">{content.bulletLabel as string}</p>
+              )}
+              {bullets.length > 0 && (
+                <ul className="space-y-2 mb-2">
+                  {bullets.map((b, i) => (
+                    <li key={i} className="flex items-start gap-2.5 section-body-text !max-w-none">
+                      <Check size={14} strokeWidth={1.25} className="text-[var(--color-heading)] mt-1 shrink-0" />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {(content.closing as string) && (
+                <p className="section-body-text italic !max-w-none">{content.closing as string}</p>
+              )}
             </div>
             {sideImage && (
               <div className="relative aspect-square overflow-hidden luxury-card">

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 declare global {
   interface Window {
@@ -156,11 +157,14 @@ export default function DigitalProductDetailPage() {
   return (
     <div className="section-padding luxury-section-bg">
       <div className="container-main max-w-4xl">
+        <AnimateOnScroll>
         <Link href="/digital-products" className="text-sm text-[var(--color-text)] hover:opacity-70 mb-8 inline-block">
           ← Back to Digital Products
         </Link>
+        </AnimateOnScroll>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+          <AnimateOnScroll delay={0.1}>
           <div className="relative aspect-square bg-[var(--color-image-bg)] border border-[var(--color-card-border)]">
             {product.coverImage ? (
               <Image
@@ -179,7 +183,9 @@ export default function DigitalProductDetailPage() {
               </div>
             )}
           </div>
+          </AnimateOnScroll>
 
+          <AnimateOnScroll delay={0.2}>
           <div>
             <div className="heading-gold-line mb-4" />
             <h1 className="product-title mb-4">{product.title}</h1>
@@ -222,6 +228,7 @@ export default function DigitalProductDetailPage() {
               After payment, your download link will be emailed instantly.
             </p>
           </div>
+          </AnimateOnScroll>
         </div>
       </div>
     </div>

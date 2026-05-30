@@ -44,6 +44,35 @@ const PRODUCT_TEXT = {
 };
 
 const SECTIONS = {
+  heroSection: {
+    sectionLabel: 'HERO',
+    headline: "You're not tired, burned out, or lazy",
+    headline2: 'You need balance.',
+    subtext: 'NOW Foods restores what your body has been missing.',
+    subtextSecondary:
+      'With stabilized S-Adenosyl-L-Methionine, NOW Foods SAMe 400 mg supports mood, nervous system health, and joint comfort — your shortcut to emotional balance, mental clarity, and comfortable movement in 30 days.*',
+    buttonText: 'Try SAMe Today',
+    buttonHref: '/#product',
+    ratingLabel: '4.8 Stars from 400+ reviews',
+    backgroundImage: '',
+  },
+  bestSellers: {
+    sectionLabel: 'BEST SELLERS',
+    heading: 'Our Top Pick',
+    subtext: 'Shop our most popular pack sizes.',
+  },
+  blogSection: {
+    sectionLabel: 'WELLNESS INSIGHTS',
+    heading: 'Our Blog',
+    subtext: 'Expert tips on mood, wellness, and supplement science.',
+  },
+  ctaBanner: {
+    headline: 'Ready to feel the difference?',
+    subtext: 'Join thousands who trust NOW Foods SAMe for daily mood and wellness support.*',
+    buttonText: 'Shop Now',
+    buttonHref: '/#product',
+    backgroundImage: '',
+  },
   announcement: {
     text: 'FREE SHIPPING ON ALL ORDERS ABOVE ₹499',
     shippingThreshold: 499,
@@ -82,13 +111,16 @@ const SECTIONS = {
     ],
   },
   statsSection: {
+    sectionLabel: 'THE SCIENCE',
     heading: 'Why Your Body Needs SAMe',
     paragraph:
       'Stress, aging, and poor diet can lower your natural SAMe levels — affecting mood, mental energy, and how your joints feel day to day. Replenishing SAMe helps support the biochemical pathways your brain and body rely on every day.',
     stat1: { number: '80%', text: 'of adults report feeling stressed enough to affect daily mood and focus' },
     stat2: { number: '65%', text: 'experience occasional joint stiffness from daily activity or exercise' },
+    closing: 'Replenishing SAMe supports the biochemical pathways your brain and body rely on — for mood balance, mental clarity, and comfortable movement.*',
   },
   goldStandard: {
+    sectionLabel: 'QUALITY STANDARD',
     heading: 'The NOW Foods Quality Standard',
     paragraph:
       'Since 1968, NOW Foods has been a leader in natural supplements — manufactured in GMP-certified facilities with rigorous quality testing. Every batch of SAMe is stabilized for potency and delivered in a convenient 400 mg strength.',
@@ -97,8 +129,11 @@ const SECTIONS = {
       'Supports neurotransmitter synthesis for mood and mental clarity.*',
       'Helps maintain joint comfort from everyday strain.*',
     ],
+    bulletLabel: 'These nutrients',
+    closing: 'Feel balanced from the inside out. Support your mood, mind, and movement with clinically studied SAMe — from a brand you can trust.',
   },
   scienceStats: {
+    sectionLabel: 'CLINICAL RESEARCH',
     title: 'The Science Behind SAMe',
     subtitle: 'What research says about S-Adenosyl-L-Methionine:',
     closingText:
@@ -112,6 +147,7 @@ const SECTIONS = {
     ],
   },
   comparison: {
+    sectionLabel: 'WHY DIFFERENT',
     heading: 'Why SAMe Is Different From a Basic Multivitamin',
     intro:
       'A daily multivitamin covers basic vitamins and minerals — but it does not provide **S-Adenosyl-L-Methionine**, the compound your body uses for methylation, neurotransmitter production, and joint biochemistry.',
@@ -152,12 +188,14 @@ const SECTIONS = {
     },
   },
   videoTestimonials: {
+    sectionLabel: 'REAL STORIES',
     headingLine1: 'Real Stories, Real Results:',
     headingLine2: 'How NOW Foods SAMe Is Changing Lives',
     ctaText: 'BUY NOW & SAVE',
     placeholderImages: [],
   },
   nutrientComparison: {
+    sectionLabel: 'NUTRITION COMPARISON',
     heading: 'Why NOW Foods SAMe 400 mg Stands Out',
     intro: 'Here\'s why NOW Foods SAMe 400 mg stands out — stabilized, maximum-strength SAMe your body actually uses.*',
     cards: [
@@ -214,6 +252,7 @@ const SECTIONS = {
     closingText: 'Take one tablet daily on an empty stomach. Most people notice benefits within 2 weeks of consistent use.*',
   },
   benefitsGrid: {
+    sectionLabel: 'FEATURES',
     heading: 'What NOW Foods SAMe Helps With',
     cards: [
       {
@@ -276,6 +315,7 @@ const SECTIONS = {
     disclaimer: 'Note: Do not use if you have bipolar disorder. Consult your physician before use if pregnant, nursing, or taking antidepressants or other prescription medications.',
   },
   reviewsSection: {
+    sectionLabel: 'TESTIMONIALS',
     heading: '400+ People Are Already Feeling Better With NOW Foods SAMe',
     ctaText: 'BUY NOW & SAVE',
   },

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import api from '@/lib/api';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 interface BlogPost {
   title: string;
@@ -63,6 +64,7 @@ export default function BlogPostPage() {
   return (
     <article className="luxury-section-bg">
       {blog.coverImage && (
+        <AnimateOnScroll>
         <div className="relative w-full max-h-[500px] aspect-[21/9] md:aspect-auto md:h-[500px] overflow-hidden bg-[var(--color-image-bg)]">
           <Image
             src={blog.coverImage}
@@ -74,10 +76,12 @@ export default function BlogPostPage() {
             unoptimized={blog.coverImage.startsWith('http://localhost')}
           />
         </div>
+        </AnimateOnScroll>
       )}
 
       <div className="section-padding">
         <div className="container-main max-w-3xl">
+          <AnimateOnScroll>
           <Link href="/blog" className="inline-block text-[10px] font-body uppercase tracking-[2px] text-[var(--color-heading)] mb-8 hover:opacity-70 transition-opacity">
             ← Back to Blog
           </Link>
@@ -92,11 +96,14 @@ export default function BlogPostPage() {
             <span className="mx-3 text-[var(--color-card-border)]">·</span>
             By {blog.author}
           </p>
+          </AnimateOnScroll>
 
+          <AnimateOnScroll delay={0.15}>
           <div
             className="prose-content quill-content font-body font-light text-[var(--color-text)] leading-[1.8] max-w-[680px]"
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />
+          </AnimateOnScroll>
         </div>
       </div>
     </article>

@@ -25,14 +25,14 @@ export default function HomePage() {
   return (
     <>
       <div className="product-page">
-      <ProductHero />
-      <StatsSection />
-      <GoldStandard />
-      <ScienceStats />
-      <Comparison />
-      <VideoTestimonials />
-      <NutrientComparison />
-      <ReviewsSection />
+        <ProductHero />
+        <StatsSection />
+        <GoldStandard />
+        <ScienceStats />
+        <Comparison />
+        <VideoTestimonials />
+        <NutrientComparison />
+        <ReviewsSection />
       </div>
       <StickyBar />
     </>

@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Star, BadgeCheck } from 'lucide-react';
-import { useSettings } from '@/context/SettingsContext';
+import { useSection } from '@/hooks/useSection';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import ScrollReveal from '@/components/ScrollReveal';
+import AnimateOnScroll, { AnimateOnScrollItem } from '@/components/AnimateOnScroll';
 import SectionHeading from '@/components/SectionHeading';
 import { BRAND_PATH } from '@/lib/routes';
 
@@ -22,8 +23,7 @@ interface Review {
 export default function ReviewsSection() {
   const pathname = usePathname();
   const productHref = pathname === BRAND_PATH ? '/#product' : '#product';
-  const { settings } = useSettings();
-  const content = settings?.sections?.reviewsSection?.content as Record<string, string> | undefined;
+  const { content, isVisible } = useSection('reviewsSection');
   const [reviews, setReviews] = useState<Review[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', rating: 5, title: '', text: '' });
@@ -48,25 +48,26 @@ export default function ReviewsSection() {
     }
   };
 
-  if (!content) return null;
+  if (!isVisible) return null;
 
-  const heading = content.heading || '400+ People Are Already Feeling Better With NOW Foods SAMe';
+  const sectionLabel = (content.sectionLabel as string) || 'TESTIMONIALS';
+  const heading = (content.heading as string) || '';
 
   return (
     <section className="section-padding luxury-section-white">
       <ScrollReveal>
         <div className="container-main">
-          <SectionHeading label="TESTIMONIALS">{heading}</SectionHeading>
+          <SectionHeading label={sectionLabel}>{heading}</SectionHeading>
 
-          <ScrollReveal stagger>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <AnimateOnScroll stagger className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               {reviews.slice(0, 3).map((review) => (
-                <div key={review._id} className="luxury-card p-6 md:p-8 text-left relative">
+                <AnimateOnScrollItem key={review._id}>
+                <div className="luxury-card p-6 md:p-8 text-left relative h-full">
                   <span className="review-quote-mark absolute top-4 left-6 leading-none" aria-hidden>&ldquo;</span>
                   <p className="font-heading text-base md:text-lg font-normal mb-2 mt-6 text-[var(--color-heading)]">{review.title}</p>
                   <div className="flex gap-1 mb-3">
                     {Array.from({ length: 5 }).map((_, j) => (
-                      <Star key={j} size={16} strokeWidth={1} className={j < review.rating ? 'star-fill' : 'text-[var(--color-card-border)]'} />
+                      <Star key={j} size={16} strokeWidth={1} className={j < review.rating ? 'star-fill' : 'star-empty'} />
                     ))}
                   </div>
                   <p className="text-sm md:text-[15px] text-[var(--color-text-secondary)] leading-[1.8] font-body font-light mb-4">
@@ -77,10 +78,11 @@ export default function ReviewsSection() {
                     <BadgeCheck size={13} strokeWidth={1.25} /> Verified Buyer
                   </span>
                 </div>
+                </AnimateOnScrollItem>
               ))}
-            </div>
-          </ScrollReveal>
+          </AnimateOnScroll>
 
+          <AnimateOnScroll>
           <div className="flex flex-col items-center">
             <button type="button" onClick={() => setShowForm(!showForm)} className="btn-outline px-10 py-4 mb-4">
               {showForm ? 'Cancel' : 'Write a Review'}
@@ -94,7 +96,7 @@ export default function ReviewsSection() {
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((r) => (
                     <button key={r} type="button" onClick={() => setForm({ ...form, rating: r })}>
-                      <Star size={20} strokeWidth={1} className={r <= form.rating ? 'star-fill' : 'text-[var(--color-card-border)]'} />
+                      <Star size={20} strokeWidth={1} className={r <= form.rating ? 'star-fill' : 'star-empty'} />
                     </button>
                   ))}
                 </div>
@@ -105,10 +107,11 @@ export default function ReviewsSection() {
               </form>
             )}
 
-            <a href={productHref} className="btn-secondary inline-block px-12 py-4">
-              {content.ctaText || 'Buy Now & Save'}
+            <a href={productHref} className="product-btn-secondary inline-flex w-auto px-12 py-4">
+              {(content.ctaText as string) || 'Buy Now & Save'}
             </a>
           </div>
+          </AnimateOnScroll>
         </div>
       </ScrollReveal>
     </section>

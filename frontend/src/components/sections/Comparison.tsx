@@ -2,7 +2,7 @@
 
 import { useId } from 'react';
 import Image from 'next/image';
-import { useSettings } from '@/context/SettingsContext';
+import { useSection } from '@/hooks/useSection';
 import ScrollReveal from '@/components/ScrollReveal';
 
 const BOWL_DEFAULT = 'https://images.unsplash.com/photo-1550572017-edd951b55104?w=400&fit=crop';
@@ -55,11 +55,6 @@ interface Category {
   product?: string;
   generic?: string;
 }
-
-const DEFAULT_INTRO =
-  'A daily multivitamin covers basic vitamins — but it does not provide **S-Adenosyl-L-Methionine**, the compound your body uses for methylation and neurotransmitter production.';
-const DEFAULT_INTRO_SECONDARY =
-  'NOW Foods SAMe 400 mg delivers **stabilized, bioactive SAMe** in one tablet — supporting mood, nervous system health, and joint comfort in a way standard supplements cannot.*';
 
 const DEFAULT_CATEGORIES: Category[] = [
   {
@@ -137,7 +132,7 @@ function BowlInfographic({
         {/* Labels first (behind) with white backing — arrows on top in the gap only */}
         {(Object.keys(LABEL_STYLE) as Array<keyof typeof LABEL_STYLE>).map((pos) => (
           <div key={pos} className={`absolute z-30 pointer-events-none ${LABEL_STYLE[pos]}`}>
-            <p className={`text-[11px] sm:text-[12px] font-body text-[#555555] ${LABEL_BOX}`}>
+            <p className={`text-[11px] sm:text-[12px] font-body text-[var(--color-text)] ${LABEL_BOX}`}>
               {getLabel(pos)}
             </p>
           </div>
@@ -199,9 +194,8 @@ function BowlInfographic({
 }
 
 export default function Comparison() {
-  const { settings } = useSettings();
-  const content = settings?.sections?.comparison?.content as Record<string, unknown> | undefined;
-  if (!content) return null;
+  const { content, isVisible } = useSection('comparison');
+  if (!isVisible) return null;
 
   const infographic = (content.infographic as {
     centerImage?: string;
@@ -209,24 +203,15 @@ export default function Comparison() {
     labels?: InfographicLabel[];
   }) || {};
 
-  const isLegacyContent =
-    String(content.intro || '').includes('Bee Pearl') ||
-    String(content.intro || '').includes('pre-digested superfood') ||
-    String(content.heading || '').includes('Multivitamin');
-
   const rawCategories = (content.categories as Category[]) || [];
-  const categories = isLegacyContent
-    ? DEFAULT_CATEGORIES
-    : normalizeCategories(rawCategories.length ? rawCategories : DEFAULT_CATEGORIES);
-
-  const labels = isLegacyContent ? DEFAULT_LABELS : infographic.labels?.length ? infographic.labels : DEFAULT_LABELS;
+  const categories = normalizeCategories(rawCategories.length ? rawCategories : DEFAULT_CATEGORIES);
+  const labels = infographic.labels?.length ? infographic.labels : DEFAULT_LABELS;
   const bowlImage = infographic.centerImage || BOWL_DEFAULT;
-  const brandName = isLegacyContent ? 'NOW Foods' : infographic.brandName || 'NOW Foods';
-  const heading = isLegacyContent
-    ? "Why SAMe Is Different From a Basic Multivitamin"
-    : (content.heading as string) || "Why SAMe Is Different From a Basic Multivitamin";
-  const intro = isLegacyContent ? DEFAULT_INTRO : (content.intro as string) || DEFAULT_INTRO;
-  const introSecondary = isLegacyContent ? DEFAULT_INTRO_SECONDARY : (content.introSecondary as string) || DEFAULT_INTRO_SECONDARY;
+  const brandName = infographic.brandName || 'NOW Foods';
+  const sectionLabel = (content.sectionLabel as string) || 'WHY DIFFERENT';
+  const heading = (content.heading as string) || '';
+  const intro = (content.intro as string) || '';
+  const introSecondary = (content.introSecondary as string) || '';
 
   return (
     <section className="section-padding luxury-section-white luxury-texture overflow-hidden">
@@ -234,15 +219,17 @@ export default function Comparison() {
         <div className="container-main">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             <div className="order-1">
-              <p className="section-subheading mb-2">WHY DIFFERENT</p>
+              <p className="section-subheading mb-2">{sectionLabel}</p>
               <div className="heading-decor mb-2" aria-hidden />
               <h2 className="font-heading text-xl md:text-2xl lg:text-[28px] font-normal text-[var(--color-heading)] mb-3 leading-tight">
                 {heading}
               </h2>
-              <div className="space-y-2 text-[15px] leading-relaxed font-body text-[#555555] mb-4">
-                <p dangerouslySetInnerHTML={{ __html: renderBold(intro) }} />
-                <p dangerouslySetInnerHTML={{ __html: renderBold(introSecondary) }} />
+              {(intro || introSecondary) && (
+              <div className="space-y-2 text-[15px] leading-relaxed font-body text-[var(--color-text)] mb-4">
+                {intro && <p dangerouslySetInnerHTML={{ __html: renderBold(intro) }} />}
+                {introSecondary && <p dangerouslySetInnerHTML={{ __html: renderBold(introSecondary) }} />}
               </div>
+              )}
               <div className="space-y-4">
                 {categories.map((cat, i) => (
                   <div key={i}>
@@ -251,7 +238,7 @@ export default function Comparison() {
                     </h3>
                     <ul className="space-y-2">
                       {(cat.bullets || []).map((bullet, j) => (
-                        <li key={j} className="flex items-start gap-2.5 text-[15px] font-body text-[#555555] leading-relaxed">
+                        <li key={j} className="flex items-start gap-2.5 text-[15px] font-body text-[var(--color-text)] leading-relaxed">
                           <span className="shrink-0 text-base leading-none mt-0.5 text-[var(--accent-color)]">
                             ●
                           </span>

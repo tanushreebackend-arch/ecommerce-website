@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+      <AnimateOnScroll className="w-full max-w-md">
         <h1 className="page-heading text-center mb-8">Sign In</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)}
@@ -42,7 +43,7 @@ export default function LoginPage() {
         <p className="text-center mt-4 text-sm text-[#999999]">
           Don&apos;t have an account? <Link href="/signup" className="font-medium underline">Create account</Link>
         </p>
-      </div>
+      </AnimateOnScroll>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import api from '@/lib/api';
 import SectionHeading from '@/components/SectionHeading';
-import ScrollReveal from '@/components/ScrollReveal';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 interface DigitalProduct {
   _id: string;
@@ -31,9 +31,9 @@ export default function DigitalProductsPage() {
   return (
     <section className="section-padding luxury-section-bg min-h-[60vh]">
       <div className="container-main">
-        <ScrollReveal>
+        <AnimateOnScroll>
           <SectionHeading label="INSTANT DOWNLOAD">Digital Products</SectionHeading>
-        </ScrollReveal>
+        </AnimateOnScroll>
 
         {loading ? (
           <p className="text-center section-body-text">Loading...</p>
@@ -41,8 +41,8 @@ export default function DigitalProductsPage() {
           <p className="text-center section-body-text mx-auto">No digital products available yet</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product) => (
-              <ScrollReveal key={product._id}>
+            {products.map((product, i) => (
+              <AnimateOnScroll key={product._id} delay={i * 0.1}>
                 <article className="product-card-luxury overflow-hidden flex flex-col h-full">
                   <div className="relative aspect-[4/3] bg-[var(--color-image-bg)]">
                     {product.coverImage ? (
@@ -76,7 +76,7 @@ export default function DigitalProductsPage() {
                     </div>
                   </div>
                 </article>
-              </ScrollReveal>
+              </AnimateOnScroll>
             ))}
           </div>
         )}

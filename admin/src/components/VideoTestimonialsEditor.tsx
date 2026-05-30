@@ -28,6 +28,10 @@ export default function VideoTestimonialsEditor({ content, onChange }: VideoTest
   return (
     <div className="space-y-6">
       <div>
+        <label className="text-sm text-gray-500">Section Label</label>
+        <input className="input-field mt-1" value={(content.sectionLabel as string) || ''} onChange={(e) => onChange({ ...content, sectionLabel: e.target.value })} placeholder="REAL STORIES" />
+      </div>
+      <div>
         <label className="text-sm text-gray-500">Section Heading Line 1</label>
         <input className="input-field mt-1" value={(content.headingLine1 as string) || ''} onChange={(e) => onChange({ ...content, headingLine1: e.target.value })} placeholder="Real Stories, Real Results:" />
       </div>

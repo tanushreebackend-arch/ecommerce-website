@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useSettings } from '@/context/SettingsContext';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 import Image from 'next/image';
 
 export default function ContactPage() {
@@ -38,15 +39,20 @@ export default function ContactPage() {
         </div>
       )}
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-12">
+        <AnimateOnScroll>
         <h1 className="page-heading text-center mb-3">{content?.heading || 'Get In Touch'}</h1>
         <p className="text-[#999999] text-center mb-10">{content?.subheading}</p>
+        </AnimateOnScroll>
 
         {submitted ? (
+          <AnimateOnScroll delay={0.1}>
           <div className="text-center border border-[var(--color-card-border)] p-8">
             <p className="section-lead text-brand">Thank you for reaching out!</p>
             <p className="text-sm mt-2" style={{ color: 'var(--color-text)' }}>We&apos;ll get back to you as soon as possible.</p>
           </div>
+          </AnimateOnScroll>
         ) : (
+          <AnimateOnScroll delay={0.1}>
           <form onSubmit={handleSubmit} className="space-y-4 bg-white/90 rounded-2xl p-6 border border-[var(--color-card-border)] shadow-sm">
             <input placeholder="Name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
@@ -60,6 +66,7 @@ export default function ContactPage() {
               {loading ? 'Sending...' : 'Send Message'}
             </button>
           </form>
+          </AnimateOnScroll>
         )}
       </div>
     </div>

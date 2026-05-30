@@ -68,6 +68,10 @@ export default function ComparisonEditor({ content, onChange }: ComparisonEditor
   return (
     <div className="space-y-6">
       <div>
+        <label className="text-sm text-gray-500">Section Label</label>
+        <input className="input-field mt-1" value={(content.sectionLabel as string) || ''} onChange={(e) => onChange({ ...content, sectionLabel: e.target.value })} placeholder="WHY DIFFERENT" />
+      </div>
+      <div>
         <label className="text-sm text-gray-500">Section Heading</label>
         <input
           className="input-field mt-1"

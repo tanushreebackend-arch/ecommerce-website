@@ -49,7 +49,7 @@ export default function StickyBar() {
       }`}
     >
       <div className={`sticky-bar-luxury border-t border-[var(--color-card-border)] ${visible ? 'slide-up-bar' : ''}`}>
-        <div className="container-main py-4 flex items-center justify-between gap-4">
+        <div className="container-main py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0 flex-1">
             {images[0] && (
               <div className="relative w-12 h-12 overflow-hidden shrink-0 border border-[var(--color-card-border)] bg-[var(--color-image-bg)]">
@@ -66,14 +66,14 @@ export default function StickyBar() {
               </div>
             </div>
           </div>
-          <div className="flex gap-2 shrink-0">
-            <button type="button" onClick={handleAddToCart} className="btn-primary py-3 px-5 text-[10px] hidden sm:inline-flex">
+          <div className="sticky-bar-actions flex gap-2 shrink-0">
+            <button type="button" onClick={handleAddToCart} className="product-btn-primary">
               Add to Cart
             </button>
             <button
               type="button"
               onClick={() => { handleAddToCart(); window.location.href = '/checkout'; }}
-              className="btn-secondary py-3 px-5 text-[10px]"
+              className="product-btn-secondary"
             >
               Buy Now
             </button>

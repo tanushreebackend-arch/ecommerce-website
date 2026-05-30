@@ -35,12 +35,21 @@ export default function NutrientComparisonEditor({ content, onChange }: Nutrient
   return (
     <div className="space-y-6">
       <div>
+        <label className="text-sm text-gray-500">Section Label</label>
+        <input className="input-field mt-1" value={(content.sectionLabel as string) || ''} onChange={(e) => onChange({ ...content, sectionLabel: e.target.value })} placeholder="NUTRITION COMPARISON" />
+      </div>
+      <div>
         <label className="text-sm text-gray-500">Section Heading</label>
         <input
           className="input-field mt-1"
           value={(content.heading as string) || ''}
           onChange={(e) => onChange({ ...content, heading: e.target.value })}
         />
+      </div>
+
+      <div>
+        <label className="text-sm text-gray-500">Intro / Subtext</label>
+        <textarea className="input-field mt-1" rows={2} value={(content.intro as string) || ''} onChange={(e) => onChange({ ...content, intro: e.target.value })} />
       </div>
 
       <ImageUploadField

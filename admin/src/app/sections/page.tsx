@@ -12,42 +12,57 @@ import VideoTestimonialsEditor from '@/components/VideoTestimonialsEditor';
 import ContactEditor from '@/components/ContactEditor';
 import GenericImageSectionEditor from '@/components/GenericImageSectionEditor';
 import ImageUploadField from '@/components/ImageUploadField';
-
-const SECTION_NAMES = [
-  'announcement', 'faq', 'statsSection', 'goldStandard', 'scienceStats', 'comparison', 'videoTestimonials',
-  'nutrientComparison', 'reviewsSection', 'footer', 'contact', 'navbar',
-];
+import { SectionVisibilityToggle } from '@/components/editors/SectionEditorFields';
+import {
+  HeroSectionEditor,
+  StatsSectionEditor,
+  GoldStandardEditor,
+  ScienceStatsEditor,
+  BenefitsGridEditor,
+  SimpleHeadingEditor,
+  CtaBannerEditor,
+  ReviewsSectionEditor,
+} from '@/components/editors/SectionEditors';
 
 const SECTION_LABELS: Record<string, string> = {
+  heroSection: 'Hero Section',
+  benefitsGrid: 'Features / Benefits',
+  bestSellers: 'Best Sellers',
+  statsSection: 'The Science',
+  goldStandard: 'Quality Standard',
+  scienceStats: 'Clinical Research',
+  comparison: 'Why Different',
+  videoTestimonials: 'Real Stories (Videos)',
+  nutrientComparison: 'Nutrition Comparison',
+  reviewsSection: 'Testimonials (Reviews)',
+  blogSection: 'Blog Section',
+  ctaBanner: 'CTA Banner',
   announcement: 'Announcement Bar',
   faq: 'FAQ Section',
-  statsSection: 'Why Modern Food (Stats)',
-  goldStandard: 'Gold Standard',
-  scienceStats: 'Science Stats Bar',
-  comparison: 'Comparison Section',
-  videoTestimonials: 'Video Testimonials',
-  nutrientComparison: 'Nutrient Comparison',
-  reviewsSection: 'Reviews Section',
+  navbar: 'Navbar',
   footer: 'Footer',
   contact: 'Contact Page',
-  navbar: 'Navbar',
 };
 
 const IMAGE_FIELD_KEYS = ['image', 'imageUrl', 'backgroundImage', 'logoUrl', 'heroImage'];
 
 export default function SectionsPage() {
-  const [activeSection, setActiveSection] = useState('announcement');
+  const [activeSection, setActiveSection] = useState('heroSection');
   const [content, setContent] = useState<Record<string, unknown>>({});
+  const [isVisible, setIsVisible] = useState(true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    adminApi.getSection(activeSection).then((s) => setContent(s.content || {})).catch(console.error);
+    adminApi.getSection(activeSection).then((s) => {
+      setContent(s.content || {});
+      setIsVisible(s.isVisible !== false);
+    }).catch(console.error);
   }, [activeSection]);
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      await adminApi.updateSection(activeSection, { content });
+      await adminApi.updateSection(activeSection, { content, isVisible });
       toast.success('Section saved!');
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Save failed');
@@ -68,6 +83,33 @@ export default function SectionsPage() {
   };
 
   const renderEditor = () => {
+    if (activeSection === 'heroSection') {
+      return <HeroSectionEditor content={content} onChange={setContent} />;
+    }
+    if (activeSection === 'benefitsGrid') {
+      return <BenefitsGridEditor content={content} onChange={setContent} />;
+    }
+    if (activeSection === 'bestSellers') {
+      return <SimpleHeadingEditor content={content} onChange={setContent} fields={['heading', 'subtext']} />;
+    }
+    if (activeSection === 'blogSection') {
+      return <SimpleHeadingEditor content={content} onChange={setContent} fields={['heading', 'subtext']} />;
+    }
+    if (activeSection === 'ctaBanner') {
+      return <CtaBannerEditor content={content} onChange={setContent} />;
+    }
+    if (activeSection === 'statsSection') {
+      return <StatsSectionEditor content={content} onChange={setContent} />;
+    }
+    if (activeSection === 'goldStandard') {
+      return <GoldStandardEditor content={content} onChange={setContent} />;
+    }
+    if (activeSection === 'scienceStats') {
+      return <ScienceStatsEditor content={content} onChange={setContent} />;
+    }
+    if (activeSection === 'reviewsSection') {
+      return <ReviewsSectionEditor content={content} onChange={setContent} />;
+    }
     if (activeSection === 'announcement') {
       return (
         <div className="space-y-4">
@@ -96,17 +138,6 @@ export default function SectionsPage() {
               }}
               placeholder="1299"
             />
-            <p className="text-xs text-gray-400 mt-1">
-              Change this once — the yellow bar, cart truck progress, checkout, and product page all update automatically.
-            </p>
-          </div>
-          <div>
-            <label className="text-sm text-gray-500">Background Color</label>
-            <input className="input-field mt-1" value={(content.backgroundColor as string) || ''} onChange={(e) => updateField('backgroundColor', e.target.value)} />
-          </div>
-          <div>
-            <label className="text-sm text-gray-500">Text Color</label>
-            <input className="input-field mt-1" value={(content.textColor as string) || ''} onChange={(e) => updateField('textColor', e.target.value)} />
           </div>
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={content.visible !== false} onChange={(e) => updateField('visible', e.target.checked)} />
@@ -127,41 +158,27 @@ export default function SectionsPage() {
     if (activeSection === 'videoTestimonials') {
       return <VideoTestimonialsEditor content={content} onChange={setContent} />;
     }
-    if (activeSection === 'statsSection') {
-      return (
-        <GenericImageSectionEditor
-          sectionName="statsSection"
-          content={content}
-          onChange={setContent}
-          imageField="backgroundImage"
-          imageLabel="Background / Side Image"
-          textFields={[
-            { key: 'heading', label: 'Heading' },
-            { key: 'paragraph', label: 'Paragraph', multiline: true },
-          ]}
-        />
-      );
-    }
-    if (activeSection === 'goldStandard') {
-      return (
-        <GenericImageSectionEditor
-          sectionName="goldStandard"
-          content={content}
-          onChange={setContent}
-          imageField="image"
-          imageLabel="Section Image"
-          textFields={[
-            { key: 'heading', label: 'Heading' },
-            { key: 'paragraph', label: 'Paragraph', multiline: true },
-          ]}
-        />
-      );
-    }
     if (activeSection === 'comparison') {
       return <ComparisonEditor content={content} onChange={setContent} />;
     }
     if (activeSection === 'nutrientComparison') {
       return <NutrientComparisonEditor content={content} onChange={setContent} />;
+    }
+    if (activeSection === 'footer') {
+      return (
+        <GenericImageSectionEditor
+          sectionName="footer"
+          content={content}
+          onChange={setContent}
+          imageField="logoUrl"
+          imageLabel="Footer Logo"
+          textFields={[
+            { key: 'copyright', label: 'Copyright Text' },
+            { key: 'newsletterPlaceholder', label: 'Newsletter Placeholder' },
+            { key: 'newsletterButton', label: 'Newsletter Button' },
+          ]}
+        />
+      );
     }
 
     const fields = Object.entries(content);
@@ -201,29 +218,13 @@ export default function SectionsPage() {
           </label>
         );
       }
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
         return (
           <div key={key} className="border rounded-lg p-4">
             <label className="text-sm font-semibold capitalize mb-2 block">{key.replace(/([A-Z])/g, ' $1')}</label>
             <textarea
               className="input-field font-mono text-xs"
               rows={8}
-              value={JSON.stringify(value, null, 2)}
-              onChange={(e) => {
-                try { updateField(key, JSON.parse(e.target.value)); } catch { /* ignore invalid JSON while typing */ }
-              }}
-            />
-            <p className="text-xs text-gray-400 mt-1">Edit as JSON array</p>
-          </div>
-        );
-      }
-      if (typeof value === 'object' && value !== null) {
-        return (
-          <div key={key} className="border rounded-lg p-4">
-            <label className="text-sm font-semibold capitalize mb-2 block">{key.replace(/([A-Z])/g, ' $1')}</label>
-            <textarea
-              className="input-field font-mono text-xs"
-              rows={6}
               value={JSON.stringify(value, null, 2)}
               onChange={(e) => {
                 try { updateField(key, JSON.parse(e.target.value)); } catch { /* ignore */ }
@@ -236,6 +237,27 @@ export default function SectionsPage() {
     });
   };
 
+  const homepageSections = ['heroSection', 'benefitsGrid', 'bestSellers', 'blogSection', 'ctaBanner'];
+  const productSections = ['statsSection', 'goldStandard', 'scienceStats', 'comparison', 'videoTestimonials', 'nutrientComparison', 'reviewsSection'];
+  const layoutSections = ['announcement', 'faq', 'navbar', 'footer', 'contact'];
+
+  const renderNavGroup = (title: string, names: string[]) => (
+    <>
+      <p className="text-[10px] uppercase tracking-wider text-gray-400 px-3 pt-3 pb-1">{title}</p>
+      {names.map((name) => (
+        <button
+          key={name}
+          onClick={() => setActiveSection(name)}
+          className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+            activeSection === name ? 'bg-green-700 text-white' : 'hover:bg-gray-100 text-gray-600'
+          }`}
+        >
+          {SECTION_LABELS[name] || name}
+        </button>
+      ))}
+    </>
+  );
+
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
@@ -245,22 +267,15 @@ export default function SectionsPage() {
 
       <div className="flex gap-6">
         <div className="w-56 shrink-0 space-y-1">
-          {SECTION_NAMES.map((name) => (
-            <button
-              key={name}
-              onClick={() => setActiveSection(name)}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                activeSection === name ? 'bg-green-700 text-white' : 'hover:bg-gray-100 text-gray-600'
-              }`}
-            >
-              {SECTION_LABELS[name] || name}
-            </button>
-          ))}
+          {renderNavGroup('Homepage', homepageSections)}
+          {renderNavGroup('Product Page', productSections)}
+          {renderNavGroup('Layout', layoutSections)}
         </div>
 
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
           <div className="card space-y-4">
             <h2 className="font-semibold text-lg">{SECTION_LABELS[activeSection]}</h2>
+            <SectionVisibilityToggle isVisible={isVisible} onChange={setIsVisible} />
             {renderEditor()}
           </div>
           <SectionPreview sectionName={activeSection} content={content} />

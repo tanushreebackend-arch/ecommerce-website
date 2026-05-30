@@ -7,6 +7,7 @@ const { formatTheme } = require('../utils/themeFormat');
 const Coupon = require('../models/Coupon');
 const Review = require('../models/Review');
 const Order = require('../models/Order');
+const User = require('../models/User');
 const Enquiry = require('../models/Enquiry');
 const Video = require('../models/Video');
 const Policy = require('../models/Policy');
@@ -27,12 +28,43 @@ const router = express.Router();
 
 router.use(authAdmin);
 
+function formatDateKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function buildDailyChartData(dailyAgg, days = 7) {
+  const map = new Map(dailyAgg.map((row) => [row._id, row]));
+  const result = [];
+
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - i);
+    const key = formatDateKey(date);
+    const row = map.get(key);
+
+    result.push({
+      date: key,
+      label: date.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric' }),
+      orders: row?.orders || 0,
+      revenue: row?.revenue || 0,
+    });
+  }
+
+  return result;
+}
+
 // Dashboard stats
 router.get('/dashboard/stats', async (req, res) => {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+    const chartStart = new Date(today);
+    chartStart.setDate(chartStart.getDate() - 6);
 
     const [
       ordersToday,
@@ -41,7 +73,12 @@ router.get('/dashboard/stats', async (req, res) => {
       revenueMonth,
       pendingReviews,
       newEnquiries,
+      totalCustomers,
+      totalProducts,
+      totalOrders,
+      totalRevenue,
       product,
+      dailyStats,
     ] = await Promise.all([
       Order.countDocuments({ createdAt: { $gte: today } }),
       Order.countDocuments({ createdAt: { $gte: monthStart } }),
@@ -55,7 +92,29 @@ router.get('/dashboard/stats', async (req, res) => {
       ]),
       Review.countDocuments({ status: 'pending' }),
       Enquiry.countDocuments({ isRead: false }),
+      User.countDocuments(),
+      Product.countDocuments(),
+      Order.countDocuments(),
+      Order.aggregate([
+        { $match: { paymentStatus: 'paid' } },
+        { $group: { _id: null, total: { $sum: '$total' } } },
+      ]),
       Product.findOne(),
+      Order.aggregate([
+        { $match: { createdAt: { $gte: chartStart } } },
+        {
+          $group: {
+            _id: {
+              $dateToString: { format: '%Y-%m-%d', date: '$createdAt', timezone: 'Asia/Kolkata' },
+            },
+            orders: { $sum: 1 },
+            revenue: {
+              $sum: { $cond: [{ $eq: ['$paymentStatus', 'paid'] }, '$total', 0] },
+            },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]),
     ]);
 
     const recentOrders = await Order.find()
@@ -70,8 +129,13 @@ router.get('/dashboard/stats', async (req, res) => {
       revenueMonth: revenueMonth[0]?.total || 0,
       pendingReviews,
       newEnquiries,
+      totalCustomers,
+      totalProducts,
+      totalOrders,
+      totalRevenue: totalRevenue[0]?.total || 0,
       lowStock: product?.stock < 10,
       stockCount: product?.stock || 0,
+      chartData: buildDailyChartData(dailyStats),
       recentOrders,
     });
   } catch (error) {

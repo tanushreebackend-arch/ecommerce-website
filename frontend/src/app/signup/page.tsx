@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+      <AnimateOnScroll className="w-full max-w-md">
         <h1 className="page-heading text-center mb-8">Create Account</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -51,7 +52,7 @@ export default function SignupPage() {
         <p className="text-center mt-4 text-sm text-[#999999]">
           Already have an account? <Link href="/login" className="font-medium underline">Sign in</Link>
         </p>
-      </div>
+      </AnimateOnScroll>
     </div>
   );
 }

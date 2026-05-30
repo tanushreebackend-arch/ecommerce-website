@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import api from '@/lib/api';
 import SectionHeading from '@/components/SectionHeading';
-import ScrollReveal from '@/components/ScrollReveal';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 interface BlogPost {
   _id: string;
@@ -41,9 +41,9 @@ export default function BlogPage() {
   return (
     <section className="section-padding luxury-section-bg luxury-texture min-h-[60vh]">
       <div className="container-main">
-        <ScrollReveal>
+        <AnimateOnScroll>
           <SectionHeading label="WELLNESS INSIGHTS">Our Blog</SectionHeading>
-        </ScrollReveal>
+        </AnimateOnScroll>
 
         {loading ? (
           <p className="text-center section-body-text font-body">Loading articles...</p>
@@ -54,8 +54,8 @@ export default function BlogPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.map((blog) => (
-              <ScrollReveal key={blog._id}>
+            {blogs.map((blog, i) => (
+              <AnimateOnScroll key={blog._id} delay={i * 0.1}>
                 <article className="product-card-luxury overflow-hidden flex flex-col h-full">
                   {blog.coverImage ? (
                     <div className="relative aspect-[16/10] bg-[var(--color-image-bg)]">
@@ -82,7 +82,7 @@ export default function BlogPage() {
                     </Link>
                   </div>
                 </article>
-              </ScrollReveal>
+              </AnimateOnScroll>
             ))}
           </div>
         )}

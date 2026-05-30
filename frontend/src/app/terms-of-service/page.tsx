@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 function PolicyPage({ type }: { type: string }) {
   const [content, setContent] = useState('');
@@ -15,10 +16,10 @@ function PolicyPage({ type }: { type: string }) {
   }, [type]);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
+    <AnimateOnScroll className="max-w-3xl mx-auto px-4 py-12">
       <h1 className="page-heading mb-8 capitalize">{title.replace(/-/g, ' ')}</h1>
       <div className="prose-content" dangerouslySetInnerHTML={{ __html: content }} />
-    </div>
+    </AnimateOnScroll>
   );
 }
 

@@ -7,6 +7,7 @@ import { useSettings } from '@/context/SettingsContext';
 import { useCartStore } from '@/store/cartStore';
 import PaymentIcons from '@/components/PaymentIcons';
 import ProductImageZoom from '@/components/product/ProductImageZoom';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 import FaqAccordion from '@/components/sections/FaqAccordion';
 import { useFaqItems } from '@/components/sections/FaqSection';
 import { getFreeShippingThreshold } from '@/lib/shipping';
@@ -101,7 +102,7 @@ export default function ProductHero() {
     <section id="product" className="section-padding hero-luxury">
       <div className="container-main">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start overflow-visible">
-          <div className="lg:sticky lg:top-24 lg:self-start overflow-visible">
+          <AnimateOnScroll className="lg:sticky lg:top-24 lg:self-start overflow-visible">
             {images[selectedImage] && (
               <ProductImageZoom
                 src={images[selectedImage].url}
@@ -121,21 +122,21 @@ export default function ProductHero() {
                 </button>
               ))}
             </div>
-          </div>
+          </AnimateOnScroll>
 
-          <div className="flex flex-col font-body">
-            <div className="heading-gold-line mb-3" aria-hidden />
+          <AnimateOnScroll delay={0.1} className="flex flex-col font-body">
+            <div className="product-decor-line" aria-hidden />
             <h1 className="product-title mb-3">{product.name as string}</h1>
 
             <div className="flex flex-wrap items-center gap-3 mb-3">
               <div className="flex items-center gap-1">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} size={15} strokeWidth={1} className={i < Math.floor(rating) ? 'star-fill' : 'text-[var(--color-card-border)]'} />
+                  <Star key={i} size={15} strokeWidth={1} className={i < Math.floor(rating) ? 'star-fill' : 'star-empty'} />
                 ))}
               </div>
-              <span className="text-sm font-body font-light text-[var(--color-text)]">{rating}/5</span>
-              <span className="text-[var(--color-card-border)]">|</span>
-              <button className="text-sm font-body font-light text-[var(--color-text)] hover:opacity-70 transition-opacity">
+              <span className="text-sm font-body font-light text-[#0A0A0A]">{rating}/5</span>
+              <span className="text-[#E8E8E8]">|</span>
+              <button className="text-sm font-body font-light text-[#0A0A0A] hover:opacity-70 transition-opacity">
                 127 reviews
               </button>
             </div>
@@ -150,11 +151,11 @@ export default function ProductHero() {
 
             <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
               <span className="product-price">₹{displayPrice.toLocaleString('en-IN')}</span>
-              <span className="product-price-old text-base font-body font-normal">
+              <span className="product-price-old font-body">
                 ₹{originalPrice?.toLocaleString('en-IN')}
               </span>
             </div>
-            <p className="text-xs text-[var(--color-text)] mb-4 font-body font-light tracking-wide">Inclusive of all taxes</p>
+            <p className="product-tax-note mb-4 font-body tracking-wide">Inclusive of all taxes</p>
 
             {(product.stock as number) <= 50 && (
               <span className="stock-badge mb-4">
@@ -162,15 +163,15 @@ export default function ProductHero() {
               </span>
             )}
 
-            <div className="space-y-2 mb-4 section-body-text">
+            <div className="space-y-2 mb-4 product-description">
               <p dangerouslySetInnerHTML={{ __html: boldKeywords(para1) }} />
               <p dangerouslySetInnerHTML={{ __html: boldKeywords(para2) }} />
             </div>
 
             <ul className="space-y-2 mb-4 max-w-[680px]">
               {displayBenefits.map((b, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm font-body font-normal text-[var(--color-text)] leading-[1.8]">
-                  <Check size={14} strokeWidth={1.25} className="text-[var(--color-heading)] mt-1 shrink-0" />
+                <li key={i} className="flex items-start gap-3 text-sm font-body font-light text-[#555555] leading-[1.8]">
+                  <Check size={14} strokeWidth={1.25} className="text-[#0A0A0A] mt-1 shrink-0" />
                   {b}
                 </li>
               ))}
@@ -183,11 +184,12 @@ export default function ProductHero() {
             </div>
 
             <div className="space-y-3 mb-4">
-              {packs.map((pack) => {
+              {packs.map((pack, i) => {
                 const selected = selectedPack === pack._id;
                 const qualifiesFreeShip = pack.price >= freeShippingThreshold;
                 return (
-                  <div key={pack._id}>
+                  <AnimateOnScroll key={pack._id} delay={i * 0.1}>
+                  <div>
                     <label className={`pack-card flex items-center justify-between p-5 cursor-pointer ${selected ? 'selected' : ''}`}>
                       <div className="flex items-start gap-3 flex-1 min-w-0">
                         <input type="radio" name="pack" checked={selected} onChange={() => setSelectedPack(pack._id)} className="mt-1 accent-[var(--color-heading)] shrink-0" />
@@ -209,6 +211,7 @@ export default function ProductHero() {
                       <p className="mt-2 text-[11px] font-body uppercase tracking-[2px] text-[var(--color-text)] text-center">+ Free Shipping</p>
                     )}
                   </div>
+                  </AnimateOnScroll>
                 );
               })}
             </div>
@@ -236,15 +239,18 @@ export default function ProductHero() {
               </div>
             </div>
 
+            <AnimateOnScroll delay={0.15}>
             <div ref={buttonsRef} className="space-y-3 mb-4">
-              <button type="button" onClick={handleAddToCart} className="btn-primary w-full">
+              <button type="button" onClick={handleAddToCart} className="product-btn-primary">
                 Add to Cart
               </button>
-              <button type="button" onClick={() => { handleAddToCart(); window.location.href = '/checkout'; }} className="btn-secondary w-full">
+              <button type="button" onClick={() => { handleAddToCart(); window.location.href = '/checkout'; }} className="product-btn-secondary">
                 Buy Now
               </button>
             </div>
+            </AnimateOnScroll>
 
+            <AnimateOnScroll delay={0.2}>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4 py-4 border-y border-[var(--color-card-border)]">
               {[
                 { label: 'Secure Checkout' },
@@ -257,28 +263,33 @@ export default function ProductHero() {
                 </div>
               ))}
             </div>
+            </AnimateOnScroll>
 
             {faqItems.length > 0 && (
+              <AnimateOnScroll delay={0.25}>
               <div className="mb-4">
                 <p className="section-label mb-2">Quick Questions</p>
                 <FaqAccordion items={faqItems} compact defaultOpen={null} />
               </div>
+              </AnimateOnScroll>
             )}
 
+            <AnimateOnScroll delay={0.3}>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm mb-4 font-body font-light">
-              <span className="inline-flex items-center gap-2 text-[var(--color-primary)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-heading)]" />
+              <span className="inline-flex items-center gap-2 text-[#0A0A0A]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#0A0A0A]" />
                 In Stock
               </span>
-              <span className="text-[var(--color-card-border)]">|</span>
-              <span className="inline-flex items-center gap-2 text-[var(--color-text-secondary)]">
+              <span className="text-[#E8E8E8]">|</span>
+              <span className="inline-flex items-center gap-2 text-[#555555]">
                 <Truck size={14} strokeWidth={1.25} />
                 {(product.deliveryText as string) || 'Expected delivery in 3-5 business days'}
               </span>
             </div>
 
             <PaymentIcons />
-          </div>
+            </AnimateOnScroll>
+          </AnimateOnScroll>
         </div>
       </div>
     </section>

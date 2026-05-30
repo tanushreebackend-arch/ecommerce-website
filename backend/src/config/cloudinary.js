@@ -1,3 +1,4 @@
+/** Cloudinary npm v1.x — API is accessed via the .v2 namespace */
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({

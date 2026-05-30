@@ -24,6 +24,7 @@ export default function HomePage() {
 
   return (
     <>
+      <div className="product-page">
       <ProductHero />
       <StatsSection />
       <GoldStandard />
@@ -32,6 +33,7 @@ export default function HomePage() {
       <VideoTestimonials />
       <NutrientComparison />
       <ReviewsSection />
+      </div>
       <StickyBar />
     </>
   );

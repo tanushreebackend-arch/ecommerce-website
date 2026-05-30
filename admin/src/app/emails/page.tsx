@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { adminApi } from '@/lib/api';
 import toast from 'react-hot-toast';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
 type EmailSettings = {
   welcomeEnabled: boolean;
   orderConfirmationEnabled: boolean;
@@ -15,8 +13,14 @@ type EmailSettings = {
   welcomeCtaText: string;
   orderCtaText: string;
   abandonedCartCtaText: string;
-  bannerColor: string;
 };
+
+const PREVIEW_TYPES = [
+  { id: 'welcome', label: 'Welcome' },
+  { id: 'order', label: 'Order Confirmation' },
+  { id: 'abandoned', label: 'Abandoned Cart' },
+  { id: 'digital', label: 'Digital Product' },
+] as const;
 
 const DELAY_OPTIONS = [
   { value: 1, label: '1 hour' },
@@ -29,10 +33,44 @@ export default function EmailsPage() {
   const [settings, setSettings] = useState<EmailSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [previewType, setPreviewType] = useState<string | null>(null);
+  const [previewHtml, setPreviewHtml] = useState('');
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState('');
 
   useEffect(() => {
     adminApi.getEmailSettings().then(setSettings).catch(console.error);
   }, []);
+
+  useEffect(() => {
+    if (!previewType) {
+      setPreviewHtml('');
+      setPreviewError('');
+      return;
+    }
+
+    let cancelled = false;
+    setPreviewLoading(true);
+    setPreviewError('');
+
+    adminApi
+      .getEmailPreview(previewType)
+      .then((html) => {
+        if (!cancelled) setPreviewHtml(html);
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setPreviewHtml('');
+          setPreviewError(err instanceof Error ? err.message : 'Preview failed');
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setPreviewLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [previewType]);
 
   const handleSave = async () => {
     if (!settings) return;
@@ -80,7 +118,7 @@ export default function EmailsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold">Email Settings</h1>
-          <p className="text-sm text-gray-500 mt-1">Configure automated welcome, order, and abandoned cart emails</p>
+          <p className="text-sm text-gray-500 mt-1">Minimal black &amp; white templates for automated customer emails</p>
         </div>
         <button onClick={handleSave} disabled={saving} className="btn-admin">
           {saving ? 'Saving...' : 'Save Settings'}
@@ -113,24 +151,6 @@ export default function EmailsPage() {
                 </option>
               ))}
             </select>
-          </div>
-
-          <div>
-            <label className="text-sm text-gray-500">Banner color (green accent)</label>
-            <div className="flex gap-2 mt-1">
-              <input
-                type="color"
-                value={settings.bannerColor || '#22c55e'}
-                onChange={(e) => setSettings({ ...settings, bannerColor: e.target.value })}
-                className="w-10 h-10 rounded cursor-pointer"
-              />
-              <input
-                className="input-field flex-1"
-                value={settings.bannerColor || ''}
-                placeholder="Leave empty to use theme secondary color"
-                onChange={(e) => setSettings({ ...settings, bannerColor: e.target.value })}
-              />
-            </div>
           </div>
         </div>
 
@@ -172,28 +192,44 @@ export default function EmailsPage() {
       </div>
 
       <div className="card mt-6 space-y-4">
-        <h2 className="font-semibold">Preview Templates</h2>
+        <div>
+          <h2 className="font-semibold">Preview Templates</h2>
+          <p className="text-sm text-gray-500 mt-1">Clean white layout, black text, single CTA — letter-style emails</p>
+        </div>
         <div className="flex flex-wrap gap-3">
-          {(['welcome', 'order', 'abandoned'] as const).map((type) => (
+          {PREVIEW_TYPES.map(({ id, label }) => (
             <button
-              key={type}
+              key={id}
               type="button"
               className={`px-4 py-2 rounded-lg text-sm font-medium border ${
-                previewType === type ? 'bg-gray-900 text-white border-gray-900' : 'border-gray-300 hover:bg-gray-50'
+                previewType === id ? 'bg-gray-900 text-white border-gray-900' : 'border-gray-300 hover:bg-gray-50'
               }`}
-              onClick={() => setPreviewType(type)}
+              onClick={() => setPreviewType(id)}
             >
-              Preview {type === 'welcome' ? 'Welcome' : type === 'order' ? 'Order' : 'Abandoned Cart'}
+              Preview {label}
             </button>
           ))}
         </div>
         {previewType && (
-          <div className="border rounded-lg overflow-hidden bg-gray-100">
-            <iframe
-              title={`${previewType} email preview`}
-              src={`${API_URL}/api/admin/emails/preview/${previewType}`}
-              className="w-full min-h-[640px] bg-white"
-            />
+          <div className="border border-[#e5e5e5] rounded-sm overflow-hidden bg-white">
+            {previewLoading && (
+              <div className="flex items-center justify-center min-h-[720px] text-sm text-gray-500">
+                Loading preview…
+              </div>
+            )}
+            {!previewLoading && previewError && (
+              <div className="flex items-center justify-center min-h-[240px] px-6 text-sm text-red-600 text-center">
+                {previewError}
+              </div>
+            )}
+            {!previewLoading && !previewError && previewHtml && (
+              <iframe
+                title={`${previewType} email preview`}
+                srcDoc={previewHtml}
+                className="w-full min-h-[720px] bg-white border-0"
+                sandbox="allow-same-origin"
+              />
+            )}
           </div>
         )}
       </div>

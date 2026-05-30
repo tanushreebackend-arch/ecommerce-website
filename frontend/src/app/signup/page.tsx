@@ -28,7 +28,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-8">Create Account</h1>
+        <h1 className="page-heading text-center mb-8">Create Account</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <input placeholder="First name" required value={form.firstName}
@@ -48,8 +48,8 @@ export default function SignupPage() {
             {loading ? 'Creating...' : 'Create Account'}
           </button>
         </form>
-        <p className="text-center mt-4 text-sm text-gray-500">
-          Already have an account? <Link href="/login" className="font-semibold underline">Sign in</Link>
+        <p className="text-center mt-4 text-sm text-[#999999]">
+          Already have an account? <Link href="/login" className="font-medium underline">Sign in</Link>
         </p>
       </div>
     </div>

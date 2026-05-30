@@ -29,7 +29,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-8">Sign In</h1>
+        <h1 className="page-heading text-center mb-8">Sign In</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
@@ -39,8 +39,8 @@ export default function LoginPage() {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-        <p className="text-center mt-4 text-sm text-gray-500">
-          Don&apos;t have an account? <Link href="/signup" className="font-semibold underline">Create account</Link>
+        <p className="text-center mt-4 text-sm text-[#999999]">
+          Don&apos;t have an account? <Link href="/signup" className="font-medium underline">Create account</Link>
         </p>
       </div>
     </div>

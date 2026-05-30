@@ -30,17 +30,17 @@ export default function BrandContactSection() {
   const inputClass = 'input-luxury-box w-full';
 
   return (
-    <section className="section-padding luxury-section-white pb-16 md:pb-20">
+    <section className="section-padding luxury-section-white">
       <ScrollReveal>
         <div className="container-main max-w-2xl">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-center text-gray-900 mb-10">
+          <h2 className="font-heading text-xl md:text-[28px] font-normal text-center text-[var(--color-heading)] mb-6">
             {content?.heading || 'Contact form'}
           </h2>
 
           {submitted ? (
             <div className="text-center py-8">
-              <p className="text-brand font-semibold text-lg">Thank you for reaching out!</p>
-              <p className="text-sm mt-2 text-gray-600">We&apos;ll get back to you as soon as possible.</p>
+              <p className="text-brand font-normal text-base">Thank you for reaching out!</p>
+              <p className="text-sm mt-2 text-[#555555]">We&apos;ll get back to you as soon as possible.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -75,7 +75,7 @@ export default function BrandContactSection() {
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 className={`${inputClass} resize-none min-h-[120px]`}
               />
-              <button type="submit" disabled={loading} className="btn-primary w-full py-4 text-base font-bold mt-4">
+              <button type="submit" disabled={loading} className="btn-primary w-full py-4 mt-4">
                 {loading ? 'Sending...' : 'Send'}
               </button>
             </form>

@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Playfair+Display:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Merriweather:wght@300;400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=DM+Serif+Display&family=Montserrat:wght@300;400;500;600&family=Raleway:wght@300;400;500;600&family=Nunito:wght@300;400;600&family=Poppins:wght@300;400;500;600&family=Inter:wght@300;400;500&family=Jost:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Josefin+Sans:wght@300;400;600&family=Outfit:wght@300;400;500&family=Syne:wght@400;600&family=Tenor+Sans&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap');
+
+@import '../styles/quill-fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -20,4 +24,21 @@ body {
 
 .card {
   @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+}
+
+.ql-container {
+  width: 100% !important;
+}
+
+.ql-editor {
+  min-height: 400px;
+  width: 100% !important;
+}
+
+.ql-toolbar {
+  width: 100% !important;
+}
+
+.rich-text-editor .quill {
+  width: 100%;
 }

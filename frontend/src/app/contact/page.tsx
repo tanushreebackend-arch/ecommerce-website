@@ -38,12 +38,12 @@ export default function ContactPage() {
         </div>
       )}
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold text-center mb-3">{content?.heading || 'Get In Touch'}</h1>
-        <p className="text-gray-500 text-center mb-10">{content?.subheading}</p>
+        <h1 className="page-heading text-center mb-3">{content?.heading || 'Get In Touch'}</h1>
+        <p className="text-[#999999] text-center mb-10">{content?.subheading}</p>
 
         {submitted ? (
-          <div className="text-center bg-green-50 rounded-2xl p-8 border border-[var(--color-card-border)]">
-            <p className="text-brand font-semibold text-lg">Thank you for reaching out!</p>
+          <div className="text-center border border-[var(--color-card-border)] p-8">
+            <p className="section-lead text-brand">Thank you for reaching out!</p>
             <p className="text-sm mt-2" style={{ color: 'var(--color-text)' }}>We&apos;ll get back to you as soon as possible.</p>
           </div>
         ) : (

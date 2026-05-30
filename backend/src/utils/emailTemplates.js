@@ -1,5 +1,13 @@
 const fmt = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
+const FONT =
+  "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+const COLOR_TEXT = '#444444';
+const COLOR_HEADING = '#000000';
+const COLOR_MUTED = '#999999';
+const COLOR_BORDER = '#e5e5e5';
+const COLOR_CTA = '#000000';
+
 function escapeHtml(str) {
   return String(str ?? '')
     .replace(/&/g, '&amp;')
@@ -8,27 +16,17 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
-function emailShell({
-  brandName,
-  brandColor,
-  bannerColor,
-  footerBg,
-  logoUrl,
-  bannerText,
-  bodyHtml,
-  copyright,
-  websiteUrl,
-  showSocial = true,
-}) {
-  const logoBlock = logoUrl
-    ? `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(brandName)}" width="120" style="display:block;max-width:120px;height:auto;margin:0 auto 8px;" />`
-    : `<div style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:1px;">${escapeHtml(brandName)}</div>`;
+function emailShell({ brandName, logoUrl, bodyHtml, copyright, websiteUrl, showSocial = false, useLogoImage = false }) {
+  const logoBlock =
+    useLogoImage && logoUrl
+      ? `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(brandName)}" width="96" style="display:block;max-width:96px;height:auto;" />`
+      : `<div style="font-family:${FONT};font-size:14px;font-weight:500;color:${COLOR_HEADING};letter-spacing:3px;text-transform:uppercase;">${escapeHtml(brandName)}</div>`;
 
   const socialLinks = showSocial
-    ? `<p style="margin:12px 0 0;font-size:12px;color:#ffffff;">
-        <a href="${escapeHtml(websiteUrl)}" style="color:#ffffff;text-decoration:underline;">Visit Store</a>
+    ? `<p style="margin:12px 0 0;font-size:12px;color:${COLOR_MUTED};line-height:1.6;">
+        <a href="${escapeHtml(websiteUrl)}" style="color:${COLOR_MUTED};text-decoration:underline;">Visit store</a>
         &nbsp;·&nbsp;
-        <a href="${escapeHtml(websiteUrl)}/track-order" style="color:#ffffff;text-decoration:underline;">Track Order</a>
+        <a href="${escapeHtml(websiteUrl)}/track-order" style="color:${COLOR_MUTED};text-decoration:underline;">Track order</a>
       </p>`
     : '';
 
@@ -38,32 +36,30 @@ function emailShell({
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${escapeHtml(brandName)}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
 </head>
-<body style="margin:0;padding:0;background-color:#f3f4f6;font-family:Arial,Helvetica,sans-serif;-webkit-text-size-adjust:100%;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f3f4f6;padding:24px 12px;">
+<body style="margin:0;padding:0;background-color:#ffffff;font-family:${FONT};-webkit-text-size-adjust:100%;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#ffffff;padding:32px 16px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;width:100%;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;width:100%;background-color:#ffffff;">
           <tr>
-            <td align="center" style="background-color:${escapeHtml(brandColor)};padding:28px 24px;border-radius:12px 12px 0 0;">
+            <td style="padding:32px 40px 24px;background-color:#ffffff;border-bottom:1px solid ${COLOR_BORDER};">
               ${logoBlock}
             </td>
           </tr>
           <tr>
-            <td align="center" style="background-color:${escapeHtml(bannerColor)};padding:16px 24px;">
-              <p style="margin:0;font-size:18px;font-weight:700;color:#ffffff;">${escapeHtml(bannerText)}</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color:#ffffff;padding:32px 28px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
+            <td style="background-color:#ffffff;padding:40px 40px 48px;">
               ${bodyHtml}
             </td>
           </tr>
           <tr>
-            <td align="center" style="background-color:${escapeHtml(footerBg)};padding:24px;border-radius:0 0 12px 12px;">
-              <p style="margin:0;font-size:12px;color:#ffffff;line-height:1.6;">${escapeHtml(copyright)}</p>
-              <p style="margin:8px 0 0;font-size:11px;color:#ffffff;">
-                <a href="${escapeHtml(websiteUrl)}/account" style="color:#ffffff;text-decoration:underline;">Manage preferences</a>
+            <td style="padding:24px 40px 32px;background-color:#ffffff;border-top:1px solid ${COLOR_BORDER};">
+              <p style="margin:0;font-size:12px;color:${COLOR_MUTED};line-height:1.7;">${escapeHtml(copyright)}</p>
+              <p style="margin:10px 0 0;font-size:12px;color:${COLOR_MUTED};line-height:1.7;">
+                <a href="${escapeHtml(websiteUrl)}/account" style="color:${COLOR_MUTED};text-decoration:underline;">Manage preferences</a>
+                &nbsp;·&nbsp;
+                <a href="${escapeHtml(websiteUrl)}/account" style="color:${COLOR_MUTED};text-decoration:underline;">Unsubscribe</a>
               </p>
               ${socialLinks}
             </td>
@@ -76,46 +72,47 @@ function emailShell({
 </html>`;
 }
 
-function ctaButton({ href, text, brandColor }) {
-  return `<table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:28px auto 0;">
+function ctaButton({ href, text }) {
+  return `<table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:32px auto 0;">
     <tr>
-      <td align="center" style="border-radius:8px;background-color:${escapeHtml(brandColor)};">
-        <a href="${escapeHtml(href)}" target="_blank" style="display:inline-block;padding:14px 32px;font-size:16px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:8px;">${escapeHtml(text)}</a>
+      <td align="center" style="border-radius:2px;background-color:${COLOR_CTA};">
+        <a href="${escapeHtml(href)}" target="_blank" style="display:inline-block;padding:12px 32px;font-family:${FONT};font-size:14px;font-weight:500;color:#ffffff;text-decoration:none;border-radius:2px;">${escapeHtml(text)}</a>
       </td>
     </tr>
   </table>`;
 }
 
+function bodyText(html) {
+  return `<p style="margin:0 0 16px;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};line-height:1.7;">${html}</p>`;
+}
+
+function heading(text) {
+  return `<h1 style="margin:0 0 24px;font-family:${FONT};font-size:22px;font-weight:500;color:${COLOR_HEADING};line-height:1.35;letter-spacing:-0.01em;">${text}</h1>`;
+}
+
+function subheading(text) {
+  return `<h2 style="margin:32px 0 12px;font-family:${FONT};font-size:14px;font-weight:500;color:${COLOR_HEADING};line-height:1.4;letter-spacing:0.02em;text-transform:uppercase;">${text}</h2>`;
+}
+
 function welcomeEmailTemplate({
   name,
   brandName,
-  brandColor,
-  bannerColor,
-  footerBg,
   logoUrl,
   websiteUrl,
   copyright,
   ctaText = 'Shop Now',
 }) {
   const bodyHtml = `
-    <p style="margin:0 0 16px;font-size:16px;color:#374151;">Hi ${escapeHtml(name)},</p>
-    <p style="margin:0 0 16px;font-size:15px;color:#4b5563;line-height:1.6;">
-      Thank you for joining <strong style="color:${escapeHtml(brandColor)};">${escapeHtml(brandName)}</strong>.
-      We're excited to have you!
-    </p>
-    <p style="margin:0 0 8px;font-size:15px;color:#4b5563;line-height:1.6;">
-      You can now track your orders, save your address, and enjoy exclusive member offers.
-    </p>
-    ${ctaButton({ href: websiteUrl, text: ctaText, brandColor })}
+    ${heading('Welcome')}
+    ${bodyText(`Hi ${escapeHtml(name)},`)}
+    ${bodyText(`Thank you for joining ${escapeHtml(brandName)}. We're glad to have you.`)}
+    ${bodyText('You can now track orders, save your address, and shop whenever you are ready.')}
+    ${ctaButton({ href: websiteUrl, text: ctaText })}
   `;
 
   return emailShell({
     brandName,
-    brandColor,
-    bannerColor,
-    footerBg,
     logoUrl,
-    bannerText: 'Welcome to the family!',
     bodyHtml,
     copyright,
     websiteUrl,
@@ -135,9 +132,6 @@ function orderConfirmationTemplate({
   paymentMethod,
   address = {},
   brandName,
-  brandColor,
-  bannerColor,
-  footerBg,
   logoUrl,
   trackOrderUrl,
   websiteUrl,
@@ -147,60 +141,58 @@ function orderConfirmationTemplate({
   const itemRows = items
     .map(
       (item) => `<tr>
-        <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;font-size:14px;color:#374151;">${escapeHtml(item.name)}${item.packLabel ? ` <span style="color:#6b7280;">(${escapeHtml(item.packLabel)})</span>` : ''}</td>
-        <td align="center" style="padding:10px 8px;border-bottom:1px solid #e5e7eb;font-size:14px;color:#374151;">${escapeHtml(item.quantity)}</td>
-        <td align="right" style="padding:10px 8px;border-bottom:1px solid #e5e7eb;font-size:14px;color:#374151;">${fmt(item.price * item.quantity)}</td>
+        <td style="padding:12px 0;border-bottom:1px solid ${COLOR_BORDER};font-family:${FONT};font-size:14px;color:${COLOR_TEXT};line-height:1.5;">${escapeHtml(item.name)}${item.packLabel ? ` <span style="color:${COLOR_MUTED};">(${escapeHtml(item.packLabel)})</span>` : ''}</td>
+        <td align="center" style="padding:12px 8px;border-bottom:1px solid ${COLOR_BORDER};font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">${escapeHtml(item.quantity)}</td>
+        <td align="right" style="padding:12px 0;border-bottom:1px solid ${COLOR_BORDER};font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">${fmt(item.price * item.quantity)}</td>
       </tr>`
     )
     .join('');
 
-  const shippingText = shipping === 0 || shipping === 'FREE' ? 'FREE' : fmt(shipping);
+  const shippingText = shipping === 0 || shipping === 'FREE' ? 'Free' : fmt(shipping);
   const discountRow =
     discount > 0
       ? `<tr>
-          <td style="padding:8px 0;font-size:14px;color:#374151;">Discount</td>
-          <td align="right" style="padding:8px 0;font-size:14px;color:#16a34a;">-${fmt(discount)}</td>
+          <td style="padding:8px 0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">Discount</td>
+          <td align="right" style="padding:8px 0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">-${fmt(discount)}</td>
         </tr>`
       : '';
 
   const bodyHtml = `
-    <p style="margin:0 0 16px;font-size:16px;color:#374151;">Hi ${escapeHtml(name)},</p>
-    <p style="margin:0 0 20px;font-size:15px;color:#4b5563;line-height:1.6;">Thanks for your order. Here are your order details:</p>
-    <p style="margin:0 0 20px;font-size:15px;font-weight:700;color:${escapeHtml(brandColor)};">
-      Order #${escapeHtml(orderId)} <span style="font-weight:400;color:#6b7280;">(${escapeHtml(date)})</span>
+    ${heading('Order confirmed')}
+    ${bodyText(`Hi ${escapeHtml(name)},`)}
+    ${bodyText('Thank you for your order. A summary is below.')}
+    <p style="margin:0 0 24px;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};line-height:1.7;">
+      <span style="color:${COLOR_HEADING};font-weight:500;">Order #${escapeHtml(orderId)}</span>
+      <span style="color:${COLOR_MUTED};"> · ${escapeHtml(date)}</span>
     </p>
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:24px;border-collapse:collapse;">
-      <tr style="background-color:#f9fafb;">
-        <th align="left" style="padding:10px 8px;font-size:13px;color:${escapeHtml(brandColor)};border-bottom:2px solid ${escapeHtml(brandColor)};">Product</th>
-        <th align="center" style="padding:10px 8px;font-size:13px;color:${escapeHtml(brandColor)};border-bottom:2px solid ${escapeHtml(brandColor)};">Quantity</th>
-        <th align="right" style="padding:10px 8px;font-size:13px;color:${escapeHtml(brandColor)};border-bottom:2px solid ${escapeHtml(brandColor)};">Price</th>
+      <tr>
+        <th align="left" style="padding:0 0 12px;font-family:${FONT};font-size:12px;font-weight:500;color:${COLOR_MUTED};border-bottom:1px solid ${COLOR_BORDER};text-transform:uppercase;letter-spacing:0.06em;">Product</th>
+        <th align="center" style="padding:0 8px 12px;font-family:${FONT};font-size:12px;font-weight:500;color:${COLOR_MUTED};border-bottom:1px solid ${COLOR_BORDER};text-transform:uppercase;letter-spacing:0.06em;">Qty</th>
+        <th align="right" style="padding:0 0 12px;font-family:${FONT};font-size:12px;font-weight:500;color:${COLOR_MUTED};border-bottom:1px solid ${COLOR_BORDER};text-transform:uppercase;letter-spacing:0.06em;">Price</th>
       </tr>
       ${itemRows}
     </table>
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:24px;">
-      <tr><td style="padding:8px 0;font-size:14px;color:#374151;">Subtotal</td><td align="right" style="padding:8px 0;font-size:14px;color:#374151;">${fmt(subtotal)}</td></tr>
-      <tr><td style="padding:8px 0;font-size:14px;color:#374151;">Shipping</td><td align="right" style="padding:8px 0;font-size:14px;color:#374151;">${shippingText}</td></tr>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:32px;">
+      <tr><td style="padding:8px 0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">Subtotal</td><td align="right" style="padding:8px 0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">${fmt(subtotal)}</td></tr>
+      <tr><td style="padding:8px 0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">Shipping</td><td align="right" style="padding:8px 0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">${shippingText}</td></tr>
       ${discountRow}
-      <tr><td style="padding:12px 0 8px;font-size:16px;font-weight:700;color:${escapeHtml(brandColor)};">Total</td><td align="right" style="padding:12px 0 8px;font-size:16px;font-weight:700;color:${escapeHtml(brandColor)};">${fmt(total)}</td></tr>
-      <tr><td style="padding:8px 0;font-size:14px;color:#374151;">Payment method</td><td align="right" style="padding:8px 0;font-size:14px;color:#374151;">${escapeHtml(paymentMethod)}</td></tr>
+      <tr><td style="padding:16px 0 8px;font-family:${FONT};font-size:14px;font-weight:500;color:${COLOR_HEADING};border-top:1px solid ${COLOR_BORDER};">Total</td><td align="right" style="padding:16px 0 8px;font-family:${FONT};font-size:14px;font-weight:500;color:${COLOR_HEADING};border-top:1px solid ${COLOR_BORDER};">${fmt(total)}</td></tr>
+      <tr><td style="padding:8px 0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">Payment</td><td align="right" style="padding:8px 0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};">${escapeHtml(paymentMethod)}</td></tr>
     </table>
-    <h3 style="margin:0 0 12px;font-size:16px;color:${escapeHtml(brandColor)};">Billing Address</h3>
-    <p style="margin:0;font-size:14px;color:#4b5563;line-height:1.7;">
+    ${subheading('Shipping address')}
+    <p style="margin:0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};line-height:1.7;">
       ${escapeHtml(address.name || '')}<br />
       ${address.phone ? `${escapeHtml(address.phone)}<br />` : ''}
       ${escapeHtml([address.address, address.city, address.pincode].filter(Boolean).join(', '))}
     </p>
-    <p style="margin:24px 0 0;font-size:14px;color:#4b5563;line-height:1.6;">Your order is being processed and will be shipped soon.</p>
-    ${ctaButton({ href: trackOrderUrl, text: ctaText, brandColor })}
+    ${bodyText('Your order is being processed and will ship soon.')}
+    ${ctaButton({ href: trackOrderUrl, text: ctaText })}
   `;
 
   return emailShell({
     brandName,
-    brandColor,
-    bannerColor,
-    footerBg,
     logoUrl,
-    bannerText: 'Thank you for your order',
     bodyHtml,
     copyright,
     websiteUrl: websiteUrl || trackOrderUrl?.replace(/\/track-order.*$/, '') || '',
@@ -212,57 +204,90 @@ function abandonedCartTemplate({
   name,
   cartItems = [],
   brandName,
-  brandColor,
-  bannerColor,
-  footerBg,
   logoUrl,
   checkoutUrl,
   websiteUrl,
   copyright,
   stockLeft,
   urgencyText,
-  ctaText = 'Complete My Purchase →',
+  ctaText = 'Complete purchase',
 }) {
   const urgency = (urgencyText || '').replace(/X/g, String(stockLeft ?? 'a few'));
 
-  const itemCards = cartItems
+  const itemRows = cartItems
     .map(
-      (item) => `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:16px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-        <tr>
-          <td width="80" style="padding:12px;vertical-align:middle;">
-            ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" width="64" height="64" style="display:block;width:64px;height:64px;object-fit:cover;border-radius:6px;" />` : ''}
-          </td>
-          <td style="padding:12px 12px 12px 0;vertical-align:middle;">
-            <p style="margin:0 0 4px;font-size:15px;font-weight:700;color:${escapeHtml(brandColor)};">${escapeHtml(item.name)}</p>
-            ${item.packLabel ? `<p style="margin:0 0 4px;font-size:13px;color:#6b7280;">${escapeHtml(item.packLabel)}</p>` : ''}
-            <p style="margin:0;font-size:14px;color:#374151;">${fmt(item.price)} × ${escapeHtml(item.quantity)}</p>
-          </td>
-        </tr>
-      </table>`
+      (item) => `<tr>
+        <td style="padding:16px 0;border-bottom:1px solid ${COLOR_BORDER};vertical-align:top;">
+          <p style="margin:0 0 4px;font-family:${FONT};font-size:14px;font-weight:500;color:${COLOR_HEADING};line-height:1.4;">${escapeHtml(item.name)}</p>
+          ${item.packLabel ? `<p style="margin:0 0 4px;font-family:${FONT};font-size:13px;color:${COLOR_MUTED};line-height:1.5;">${escapeHtml(item.packLabel)}</p>` : ''}
+          <p style="margin:0;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};line-height:1.5;">${fmt(item.price)} × ${escapeHtml(item.quantity)}</p>
+        </td>
+      </tr>`
     )
     .join('');
 
   const bodyHtml = `
-    <p style="margin:0 0 16px;font-size:16px;color:#374151;">Hi ${escapeHtml(name)},</p>
-    <p style="margin:0 0 20px;font-size:15px;color:#4b5563;line-height:1.6;">
-      It looks like you left something in your cart. Don't let it slip away — your item is waiting for you!
-    </p>
-    ${itemCards}
-    <p style="margin:0 0 20px;font-size:14px;color:#374151;font-weight:600;">${escapeHtml(urgency)}</p>
-    ${ctaButton({ href: checkoutUrl, text: ctaText, brandColor })}
-    <p style="margin:24px 0 0;font-size:13px;color:#6b7280;text-align:center;">Or if you've changed your mind, no worries at all 😊</p>
+    ${heading('Your cart is waiting')}
+    ${bodyText(`Hi ${escapeHtml(name)},`)}
+    ${bodyText('You left a few items in your cart. They are still reserved for you when you are ready to checkout.')}
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:8px 0 24px;border-collapse:collapse;">
+      ${itemRows}
+    </table>
+    ${urgency ? bodyText(escapeHtml(urgency)) : ''}
+    ${ctaButton({ href: checkoutUrl, text: ctaText })}
+    <p style="margin:24px 0 0;font-family:${FONT};font-size:12px;color:${COLOR_MUTED};line-height:1.7;text-align:center;">If you no longer wish to purchase, you can ignore this email.</p>
   `;
 
   return emailShell({
     brandName,
-    brandColor,
-    bannerColor,
-    footerBg,
     logoUrl,
-    bannerText: 'Your cart misses you! 😢',
     bodyHtml,
     copyright,
     websiteUrl: websiteUrl || checkoutUrl?.replace(/\/checkout.*$/, '') || '',
+    showSocial: false,
+  });
+}
+
+function digitalProductPurchaseTemplate({
+  brandName,
+  logoUrl,
+  copyright,
+  websiteUrl,
+  customerName,
+  productTitle,
+  fileName,
+  fileType,
+  price,
+  downloadUrl,
+  orderId,
+}) {
+  const bodyHtml = `
+    ${heading('Your download is ready')}
+    ${bodyText(`Hi ${escapeHtml(customerName)},`)}
+    ${bodyText('Thank you for your purchase. Your digital product is ready to download.')}
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:8px 0 24px;border-collapse:collapse;">
+      <tr>
+        <td style="padding:20px 0;border-top:1px solid ${COLOR_BORDER};border-bottom:1px solid ${COLOR_BORDER};">
+          <p style="margin:0 0 8px;font-family:${FONT};font-size:12px;color:${COLOR_MUTED};letter-spacing:0.08em;text-transform:uppercase;">Order #${escapeHtml(orderId)}</p>
+          <p style="margin:0 0 6px;font-family:${FONT};font-size:14px;font-weight:500;color:${COLOR_HEADING};line-height:1.4;">${escapeHtml(productTitle)}</p>
+          <p style="margin:0 0 6px;font-family:${FONT};font-size:14px;color:${COLOR_TEXT};line-height:1.7;">${escapeHtml(fileName || productTitle)} · ${escapeHtml((fileType || 'file').toUpperCase())}</p>
+          <p style="margin:0;font-family:${FONT};font-size:14px;color:${COLOR_HEADING};line-height:1.7;">${fmt(price)}</p>
+        </td>
+      </tr>
+    </table>
+    ${ctaButton({ href: downloadUrl, text: 'Download file' })}
+    <p style="margin:24px 0 0;font-family:${FONT};font-size:12px;color:${COLOR_MUTED};line-height:1.7;text-align:center;">
+      If the button does not work, copy this link into your browser:<br />
+      <a href="${escapeHtml(downloadUrl)}" style="color:${COLOR_TEXT};word-break:break-all;text-decoration:underline;">${escapeHtml(downloadUrl)}</a>
+    </p>
+  `;
+
+  return emailShell({
+    brandName,
+    logoUrl,
+    bodyHtml,
+    copyright,
+    websiteUrl,
     showSocial: false,
   });
 }
@@ -271,5 +296,6 @@ module.exports = {
   welcomeEmailTemplate,
   orderConfirmationTemplate,
   abandonedCartTemplate,
+  digitalProductPurchaseTemplate,
   fmt,
 };

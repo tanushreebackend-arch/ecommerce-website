@@ -4,22 +4,26 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const connectDB = require('./config/db');
-const { UPLOADS_ROOT } = require('./utils/fileUpload');
+const migrateThemeDefaults = require('./utils/migrateTheme');
+const { UPLOADS_ROOT, isCloudinaryConfigured } = require('./utils/fileUpload');
 
 const authRoutes = require('./routes/auth');
 const settingsRoutes = require('./routes/settings');
+const themeRoutes = require('./routes/theme');
 const reviewRoutes = require('./routes/reviews');
 const enquiryRoutes = require('./routes/enquiries');
 const couponRoutes = require('./routes/coupons');
 const orderRoutes = require('./routes/orders');
 const cartRoutes = require('./routes/cart');
+const blogRoutes = require('./routes/blog');
+const digitalProductRoutes = require('./routes/digitalProducts');
 const adminRoutes = require('./routes/admin');
 const { startAbandonedCartCron } = require('./jobs/abandonedCartCron');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-connectDB();
+connectDB().then(() => migrateThemeDefaults());
 
 const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -49,11 +53,14 @@ app.use('/uploads', express.static(UPLOADS_ROOT));
 // Public routes
 app.use('/api/auth', authRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/theme', themeRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/enquiries', enquiryRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/blogs', blogRoutes);
+app.use('/api/digital-products', digitalProductRoutes);
 
 // Admin routes
 app.use('/api/admin', adminRoutes);
@@ -69,5 +76,10 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  if (isCloudinaryConfigured()) {
+    console.log('Cloudinary image uploads enabled (folder: ecommerce-uploads)');
+  } else {
+    console.log('Cloudinary not configured — images saved locally at', UPLOADS_ROOT);
+  }
   startAbandonedCartCron();
 });

@@ -1,0 +1,72 @@
+/* Quill editor — premium font classes */
+.ql-font-cormorant-garamond { font-family: 'Cormorant Garamond', serif; }
+.ql-font-playfair-display { font-family: 'Playfair Display', serif; }
+.ql-font-lora { font-family: 'Lora', serif; }
+.ql-font-merriweather { font-family: 'Merriweather', serif; }
+.ql-font-eb-garamond { font-family: 'EB Garamond', serif; }
+.ql-font-libre-baskerville { font-family: 'Libre Baskerville', serif; }
+.ql-font-crimson-text { font-family: 'Crimson Text', serif; }
+.ql-font-dm-serif-display { font-family: 'DM Serif Display', serif; }
+.ql-font-montserrat { font-family: 'Montserrat', sans-serif; }
+.ql-font-raleway { font-family: 'Raleway', sans-serif; }
+.ql-font-nunito { font-family: 'Nunito', sans-serif; }
+.ql-font-poppins { font-family: 'Poppins', sans-serif; }
+.ql-font-inter { font-family: 'Inter', sans-serif; }
+.ql-font-jost { font-family: 'Jost', sans-serif; }
+.ql-font-dm-sans { font-family: 'DM Sans', sans-serif; }
+.ql-font-josefin-sans { font-family: 'Josefin Sans', sans-serif; }
+.ql-font-outfit { font-family: 'Outfit', sans-serif; }
+.ql-font-syne { font-family: 'Syne', sans-serif; }
+.ql-font-tenor-sans { font-family: 'Tenor Sans', sans-serif; }
+.ql-font-spectral { font-family: 'Spectral', serif; }
+
+.ql-size-small { font-size: 0.75em; }
+.ql-size-large { font-size: 1.25em; }
+.ql-size-huge { font-size: 2em; }
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=cormorant-garamond]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=cormorant-garamond]::before { content: 'Cormorant Garamond'; font-family: 'Cormorant Garamond', serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=playfair-display]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=playfair-display]::before { content: 'Playfair Display'; font-family: 'Playfair Display', serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=lora]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=lora]::before { content: 'Lora'; font-family: 'Lora', serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=merriweather]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=merriweather]::before { content: 'Merriweather'; font-family: 'Merriweather', serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=eb-garamond]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=eb-garamond]::before { content: 'EB Garamond'; font-family: 'EB Garamond', serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=libre-baskerville]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=libre-baskerville]::before { content: 'Libre Baskerville'; font-family: 'Libre Baskerville', serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=crimson-text]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=crimson-text]::before { content: 'Crimson Text'; font-family: 'Crimson Text', serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=dm-serif-display]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=dm-serif-display]::before { content: 'DM Serif Display'; font-family: 'DM Serif Display', serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=montserrat]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=montserrat]::before { content: 'Montserrat'; font-family: 'Montserrat', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=raleway]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=raleway]::before { content: 'Raleway'; font-family: 'Raleway', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=nunito]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=nunito]::before { content: 'Nunito'; font-family: 'Nunito', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=poppins]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=poppins]::before { content: 'Poppins'; font-family: 'Poppins', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=inter]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=inter]::before { content: 'Inter'; font-family: 'Inter', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=jost]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=jost]::before { content: 'Jost'; font-family: 'Jost', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=dm-sans]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=dm-sans]::before { content: 'DM Sans'; font-family: 'DM Sans', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=josefin-sans]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=josefin-sans]::before { content: 'Josefin Sans'; font-family: 'Josefin Sans', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=outfit]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=outfit]::before { content: 'Outfit'; font-family: 'Outfit', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=syne]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=syne]::before { content: 'Syne'; font-family: 'Syne', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=tenor-sans]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=tenor-sans]::before { content: 'Tenor Sans'; font-family: 'Tenor Sans', sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=spectral]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=spectral]::before { content: 'Spectral'; font-family: 'Spectral', serif; }
+
+.ql-snow .ql-picker.ql-font .ql-picker-label::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item::before { content: 'Cormorant Garamond'; font-family: 'Cormorant Garamond', serif; }
+
+.rich-text-editor .ql-container { min-height: 300px; font-size: 16px; }
+.rich-text-editor .ql-editor { min-height: 300px; }

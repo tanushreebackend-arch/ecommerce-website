@@ -10,14 +10,14 @@ function ConfirmationContent() {
   const name = params.get('name') || 'there';
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-16 text-center">
-      <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-        <span className="text-3xl">✓</span>
+    <div className="max-w-lg mx-auto px-4 py-8 text-center">
+      <div className="w-14 h-14 border border-[var(--color-heading)] flex items-center justify-center mx-auto mb-6">
+        <span className="text-2xl text-[var(--color-heading)]">✓</span>
       </div>
-      <h1 className="text-3xl font-bold mb-2">Thank you, {name}!</h1>
-      <p className="text-gray-500 mb-2">Order #{orderId}</p>
+      <h1 className="page-heading mb-2">Thank you, {name}!</h1>
+      <p className="text-[#999999] mb-2">Order #{orderId}</p>
       <p className="text-lg mb-8">Your order is confirmed</p>
-      <p className="text-sm text-gray-500 mb-8">
+      <p className="text-sm text-[#999999] mb-8">
         A confirmation email has been sent to your email address. Estimated delivery in 3-5 business days.
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">

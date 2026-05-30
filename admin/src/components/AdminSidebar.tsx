@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, Package, Tag, FileText, Palette, Ticket,
-  Star, Video, Mail, ShoppingCart, LogOut, Send,
+  Star, Video, Mail, ShoppingCart, LogOut, Send, BookOpen, Download,
 } from 'lucide-react';
 import { adminApi } from '@/lib/api';
 import toast from 'react-hot-toast';
@@ -17,6 +17,8 @@ const navItems = [
   { href: '/theme', label: 'Theme', icon: Palette },
   { href: '/coupons', label: 'Coupons', icon: Ticket },
   { href: '/reviews', label: 'Reviews', icon: Star },
+  { href: '/blog', label: 'Blog', icon: BookOpen },
+  { href: '/digital-products', label: 'Digital Products', icon: Download },
   { href: '/videos', label: 'Videos', icon: Video },
   { href: '/enquiries', label: 'Enquiries', icon: Mail },
   { href: '/emails', label: 'Emails', icon: Send },

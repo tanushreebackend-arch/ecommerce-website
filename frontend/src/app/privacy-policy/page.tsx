@@ -16,7 +16,7 @@ function PolicyPage({ type }: { type: string }) {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8 capitalize">{title.replace(/-/g, ' ')}</h1>
+      <h1 className="page-heading mb-8 capitalize">{title.replace(/-/g, ' ')}</h1>
       <div className="prose-content" dangerouslySetInnerHTML={{ __html: content }} />
     </div>
   );

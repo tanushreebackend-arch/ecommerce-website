@@ -24,9 +24,6 @@ async function sendWelcomeEmail(user) {
   const html = welcomeEmailTemplate({
     name,
     brandName: ctx.brandName,
-    brandColor: ctx.brandColor,
-    bannerColor: ctx.bannerColor,
-    footerBg: ctx.footerBg,
     logoUrl: ctx.logoUrl,
     websiteUrl: ctx.websiteUrl,
     copyright: ctx.copyright,
@@ -35,7 +32,7 @@ async function sendWelcomeEmail(user) {
 
   return sendEmail({
     to: user.email,
-    subject: `Welcome to ${ctx.brandName}! 🎉`,
+    subject: `Welcome to ${ctx.brandName}`,
     html,
   });
 }
@@ -78,9 +75,6 @@ async function sendOrderConfirmationEmail(order) {
       pincode: addr.pinCode,
     },
     brandName: ctx.brandName,
-    brandColor: ctx.brandColor,
-    bannerColor: ctx.bannerColor,
-    footerBg: ctx.footerBg,
     logoUrl: ctx.logoUrl,
     trackOrderUrl: `${ctx.websiteUrl}/track-order`,
     websiteUrl: ctx.websiteUrl,
@@ -93,7 +87,7 @@ async function sendOrderConfirmationEmail(order) {
 
   return sendEmail({
     to: email,
-    subject: `${ctx.brandName}: Order Confirmed #${order.orderId || order._id}`,
+    subject: `${ctx.brandName} — Order confirmed #${order.orderId || order._id}`,
     html,
   });
 }
@@ -107,9 +101,6 @@ async function sendAbandonedCartEmail(user, cartItems, stockLeft = 5) {
     name,
     cartItems,
     brandName: ctx.brandName,
-    brandColor: ctx.brandColor,
-    bannerColor: ctx.bannerColor,
-    footerBg: ctx.footerBg,
     logoUrl: ctx.logoUrl,
     checkoutUrl: `${ctx.websiteUrl}/checkout`,
     websiteUrl: ctx.websiteUrl,
@@ -121,7 +112,7 @@ async function sendAbandonedCartEmail(user, cartItems, stockLeft = 5) {
 
   return sendEmail({
     to: user.email,
-    subject: `Hey ${name}, you left something behind! 🛒`,
+    subject: `${name}, your cart is waiting`,
     html,
   });
 }

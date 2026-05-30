@@ -45,10 +45,10 @@ export default function ResultsTimeline() {
           <div className="space-y-8">
             {steps.map((step, i) => (
               <div key={i}>
-                <h3 className="font-heading font-bold text-lg md:text-xl text-gray-900 mb-2">
+                <h3 className="font-heading font-normal text-base text-[var(--color-heading)] mb-2">
                   {step.icon} {step.title}
                 </h3>
-                <p className="text-[15px] text-gray-700 leading-relaxed font-body">{step.description}</p>
+                <p className="text-[15px] text-[#555555] leading-relaxed font-body">{step.description}</p>
               </div>
             ))}
           </div>

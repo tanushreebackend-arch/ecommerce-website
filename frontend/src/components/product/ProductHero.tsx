@@ -6,6 +6,7 @@ import { Star, Check, Minus, Plus, Truck } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
 import { useCartStore } from '@/store/cartStore';
 import PaymentIcons from '@/components/PaymentIcons';
+import ProductImageZoom from '@/components/product/ProductImageZoom';
 import FaqAccordion from '@/components/sections/FaqAccordion';
 import { useFaqItems } from '@/components/sections/FaqSection';
 import { getFreeShippingThreshold } from '@/lib/shipping';
@@ -97,25 +98,19 @@ export default function ProductHero() {
   if (!product) return null;
 
   return (
-    <section id="product" className="section-padding hero-luxury pt-10 md:pt-14 pb-16 md:pb-20">
+    <section id="product" className="section-padding hero-luxury">
       <div className="container-main">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <div className="relative aspect-square w-full image-luxury-wrap mb-4 cursor-pointer">
-              {images[selectedImage] && (
-                <Image
-                  src={images[selectedImage].url}
-                  alt={(product.name as string) || 'Product'}
-                  fill
-                  className="object-cover product-main-image"
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 560px"
-                  quality={100}
-                  unoptimized={images[selectedImage].url.startsWith('http://localhost')}
-                />
-              )}
-            </div>
-            <div className="flex gap-3 overflow-x-auto pb-1">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start overflow-visible">
+          <div className="lg:sticky lg:top-24 lg:self-start overflow-visible">
+            {images[selectedImage] && (
+              <ProductImageZoom
+                src={images[selectedImage].url}
+                alt={(product.name as string) || 'Product'}
+                priority
+                unoptimized={images[selectedImage].url.startsWith('http://localhost')}
+              />
+            )}
+            <div className="flex gap-3 overflow-x-auto pb-1 mt-4">
               {images.slice(0, 6).map((img, i) => (
                 <button
                   key={i}
@@ -129,25 +124,25 @@ export default function ProductHero() {
           </div>
 
           <div className="flex flex-col font-body">
-            <div className="flex flex-wrap items-center gap-3 mb-5">
+            <div className="heading-gold-line mb-3" aria-hidden />
+            <h1 className="product-title mb-3">{product.name as string}</h1>
+
+            <div className="flex flex-wrap items-center gap-3 mb-3">
               <div className="flex items-center gap-1">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} size={15} strokeWidth={1} className={i < Math.floor(rating) ? 'star-gold' : 'text-[var(--color-card-border)]'} />
+                  <Star key={i} size={15} strokeWidth={1} className={i < Math.floor(rating) ? 'star-fill' : 'text-[var(--color-card-border)]'} />
                 ))}
               </div>
-              <span className="text-sm font-body font-light text-[var(--color-text-secondary)]">{rating}/5</span>
+              <span className="text-sm font-body font-light text-[var(--color-text)]">{rating}/5</span>
               <span className="text-[var(--color-card-border)]">|</span>
-              <button className="text-sm font-body font-light text-[var(--color-text-secondary)] hover:text-[var(--color-secondary)] transition-colors">
+              <button className="text-sm font-body font-light text-[var(--color-text)] hover:opacity-70 transition-opacity">
                 127 reviews
               </button>
             </div>
 
-            <div className="heading-gold-line mb-5" aria-hidden />
-            <h1 className="product-title mb-5">{product.name as string}</h1>
-
-            <div className="flex flex-wrap gap-2 mb-6">
+            <div className="flex flex-wrap gap-2 mb-4">
               {['30 Capsules', '870mg per serving'].map((badge) => (
-                <span key={badge} className="inline-flex items-center px-3 py-1.5 text-[11px] font-body uppercase tracking-[2px] border border-[var(--color-card-border)] text-[var(--color-text-secondary)] bg-white">
+                <span key={badge} className="variant-tag">
                   {badge}
                 </span>
               ))}
@@ -155,39 +150,39 @@ export default function ProductHero() {
 
             <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
               <span className="product-price">₹{displayPrice.toLocaleString('en-IN')}</span>
-              <span className="text-lg text-[var(--color-text-secondary)] line-through font-body font-light">
+              <span className="product-price-old text-base font-body font-normal">
                 ₹{originalPrice?.toLocaleString('en-IN')}
               </span>
             </div>
-            <p className="text-xs text-[var(--color-text-secondary)] mb-6 font-body font-light tracking-wide">Inclusive of all taxes</p>
+            <p className="text-xs text-[var(--color-text)] mb-4 font-body font-light tracking-wide">Inclusive of all taxes</p>
 
             {(product.stock as number) <= 50 && (
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-body uppercase tracking-[2px] border border-[var(--color-secondary)] text-[var(--color-text)] w-fit mb-6">
+              <span className="stock-badge mb-4">
                 Only {product.stock as number} left in stock
               </span>
             )}
 
-            <div className="space-y-4 mb-6 section-body-text">
+            <div className="space-y-2 mb-4 section-body-text">
               <p dangerouslySetInnerHTML={{ __html: boldKeywords(para1) }} />
               <p dangerouslySetInnerHTML={{ __html: boldKeywords(para2) }} />
             </div>
 
-            <ul className="space-y-3 mb-8 max-w-[680px]">
+            <ul className="space-y-2 mb-4 max-w-[680px]">
               {displayBenefits.map((b, i) => (
-                <li key={i} className="flex items-start gap-3 text-[15px] font-body font-light text-[var(--color-text)] leading-[1.8]">
-                  <Check size={14} strokeWidth={1.25} className="text-[var(--color-secondary)] mt-1 shrink-0" />
+                <li key={i} className="flex items-start gap-3 text-sm font-body font-normal text-[var(--color-text)] leading-[1.8]">
+                  <Check size={14} strokeWidth={1.25} className="text-[var(--color-heading)] mt-1 shrink-0" />
                   {b}
                 </li>
               ))}
             </ul>
 
             <div className="divider-with-text">
-              <span className="text-[11px] font-body uppercase tracking-[3px] text-[var(--color-text-secondary)] shrink-0">
+              <span className="text-[11px] font-body uppercase tracking-[1.5px] text-[var(--color-text-secondary)] shrink-0">
                 Choose Your Pack
               </span>
             </div>
 
-            <div className="space-y-3 mb-6">
+            <div className="space-y-3 mb-4">
               {packs.map((pack) => {
                 const selected = selectedPack === pack._id;
                 const qualifiesFreeShip = pack.price >= freeShippingThreshold;
@@ -195,41 +190,41 @@ export default function ProductHero() {
                   <div key={pack._id}>
                     <label className={`pack-card flex items-center justify-between p-5 cursor-pointer ${selected ? 'selected' : ''}`}>
                       <div className="flex items-start gap-3 flex-1 min-w-0">
-                        <input type="radio" name="pack" checked={selected} onChange={() => setSelectedPack(pack._id)} className="mt-1 accent-[var(--color-secondary)] shrink-0" />
+                        <input type="radio" name="pack" checked={selected} onChange={() => setSelectedPack(pack._id)} className="mt-1 accent-[var(--color-heading)] shrink-0" />
                         <div className="min-w-0">
-                          <p className="font-heading text-lg font-normal text-[var(--color-heading)]">{pack.label}</p>
-                          {pack.description && <p className="text-xs text-[var(--color-text-secondary)] mt-1 font-body font-light">{pack.description}</p>}
+                          <p className="font-heading text-base font-normal text-[var(--color-heading)]">{pack.label}</p>
+                          {pack.description && <p className="text-xs text-[var(--color-text)] mt-1 font-body font-light">{pack.description}</p>}
                           <div className="flex flex-wrap items-center gap-2 mt-2">
                             <span className="savings-badge">Save {pack.savingsPercent}%</span>
-                            {pack.badge && <span className="text-[11px] font-body uppercase tracking-wider text-[var(--color-secondary)]">{pack.badge}</span>}
+                            {pack.badge && <span className="text-[11px] font-body uppercase tracking-wider text-[var(--color-text)]">{pack.badge}</span>}
                           </div>
                         </div>
                       </div>
                       <div className="text-right shrink-0 ml-3">
-                        <p className="font-heading text-xl font-semibold">₹{pack.price.toLocaleString('en-IN')}</p>
-                        <p className="text-xs text-[var(--color-text-secondary)] line-through font-body font-light">₹{pack.originalPrice.toLocaleString('en-IN')}</p>
+                        <p className="font-heading text-base font-medium">₹{pack.price.toLocaleString('en-IN')}</p>
+                        <p className="text-xs product-price-old font-body font-light">₹{pack.originalPrice.toLocaleString('en-IN')}</p>
                       </div>
                     </label>
                     {qualifiesFreeShip && selected && (
-                      <p className="mt-2 text-[11px] font-body uppercase tracking-[2px] text-[var(--color-secondary)] text-center">+ Free Shipping</p>
+                      <p className="mt-2 text-[11px] font-body uppercase tracking-[2px] text-[var(--color-text)] text-center">+ Free Shipping</p>
                     )}
                   </div>
                 );
               })}
             </div>
 
-            <div className="mb-6 p-5 luxury-card">
+            <div className="mb-4 p-5 luxury-card">
               <label className="flex items-start gap-3 cursor-pointer">
-                <input type="checkbox" checked={subscribeRefills} onChange={(e) => setSubscribeRefills(e.target.checked)} className="mt-1 accent-[var(--color-secondary)] shrink-0" />
+                <input type="checkbox" checked={subscribeRefills} onChange={(e) => setSubscribeRefills(e.target.checked)} className="mt-1 accent-[var(--color-heading)] shrink-0" />
                 <div>
-                  <p className="font-body text-sm font-medium uppercase tracking-[2px] text-[var(--color-heading)]">Automatic Refills</p>
+                  <p className="font-body text-sm font-normal uppercase tracking-[1.5px] text-[var(--color-heading)]">Automatic Refills</p>
                   <p className="text-xs text-[var(--color-text-secondary)] mt-1 font-body font-light">Delivered monthly — save on every order</p>
                 </div>
               </label>
             </div>
 
-            <div className="flex items-center gap-6 mb-6">
-              <span className="text-[11px] font-body uppercase tracking-[3px] text-[var(--color-text-secondary)]">Quantity</span>
+            <div className="flex items-center gap-6 mb-4">
+              <span className="section-label">Quantity</span>
               <div className="qty-luxury flex items-center">
                 <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} aria-label="Decrease quantity">
                   <Minus size={14} strokeWidth={1.25} />
@@ -241,7 +236,7 @@ export default function ProductHero() {
               </div>
             </div>
 
-            <div ref={buttonsRef} className="space-y-3 mb-8">
+            <div ref={buttonsRef} className="space-y-3 mb-4">
               <button type="button" onClick={handleAddToCart} className="btn-primary w-full">
                 Add to Cart
               </button>
@@ -250,7 +245,7 @@ export default function ProductHero() {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 py-6 border-y border-[var(--color-card-border)]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4 py-4 border-y border-[var(--color-card-border)]">
               {[
                 { label: 'Secure Checkout' },
                 { label: `Free Shipping ₹${freeShippingThreshold}+` },
@@ -264,15 +259,15 @@ export default function ProductHero() {
             </div>
 
             {faqItems.length > 0 && (
-              <div className="mb-8">
-                <p className="text-[11px] font-body uppercase tracking-[3px] text-[var(--color-secondary)] mb-4">Quick Questions</p>
+              <div className="mb-4">
+                <p className="section-label mb-2">Quick Questions</p>
                 <FaqAccordion items={faqItems} compact defaultOpen={null} />
               </div>
             )}
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm mb-6 font-body font-light">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm mb-4 font-body font-light">
               <span className="inline-flex items-center gap-2 text-[var(--color-primary)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-secondary)]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-heading)]" />
                 In Stock
               </span>
               <span className="text-[var(--color-card-border)]">|</span>
@@ -282,7 +277,7 @@ export default function ProductHero() {
               </span>
             </div>
 
-            <PaymentIcons className="payment-muted" />
+            <PaymentIcons />
           </div>
         </div>
       </div>

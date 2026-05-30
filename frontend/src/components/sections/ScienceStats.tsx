@@ -14,16 +14,16 @@ const DEFAULT_STATS = [
 function StatNumber({ value }: { value: string }) {
   if (!value.includes('%')) {
     return (
-      <span className="font-heading font-semibold leading-none text-3xl md:text-4xl lg:text-[2.75rem] text-[var(--color-secondary)]">
+      <span className="font-heading font-medium leading-none text-2xl md:text-[28px] text-[var(--color-heading)]">
         {value}
       </span>
     );
   }
   const num = value.replace('%', '');
   return (
-    <span className="font-heading font-semibold leading-none text-[var(--color-secondary)]">
+    <span className="font-heading font-medium leading-none text-[var(--color-heading)]">
       {num}
-      <sup className="text-[0.5em] font-semibold ml-0.5 align-super">%</sup>
+      <sup className="text-[0.5em] font-normal ml-0.5 align-super">%</sup>
     </span>
   );
 }
@@ -45,23 +45,23 @@ export default function ScienceStats() {
     : (raw.closingText as string) || 'With NOW Foods SAMe 400 mg, you\'re supporting the natural pathways your body uses for mood, mind, and movement.*';
 
   return (
-    <section className="section-padding luxury-section-dark">
+    <section className="section-padding luxury-section-white">
       <ScrollReveal stagger>
         <div className="container-main">
           <SectionHeading label="CLINICAL RESEARCH" subheading={subtitle}>
             {title}
           </SectionHeading>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, i) => (
               <div key={i} className="text-center px-2">
-                <p className="text-4xl md:text-5xl lg:text-[3.25rem] mb-5">
+                <p className="text-2xl md:text-[28px] mb-2">
                   <StatNumber value={stat.number} />
                 </p>
                 <p className="text-sm md:text-[15px] leading-[1.8] font-body font-light opacity-90">{stat.description}</p>
               </div>
             ))}
           </div>
-          <p className="text-center text-sm md:text-base font-body font-light mt-14 max-w-2xl mx-auto opacity-90">
+          <p className="text-center text-sm md:text-base font-body font-light mt-6 max-w-2xl mx-auto opacity-90">
             {closingText}
           </p>
         </div>

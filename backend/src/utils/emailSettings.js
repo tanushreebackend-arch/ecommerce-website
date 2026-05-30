@@ -7,10 +7,10 @@ const DEFAULT_EMAIL_SETTINGS = {
   orderConfirmationEnabled: true,
   abandonedCartEnabled: true,
   abandonedCartDelayHours: 1.5,
-  abandonedCartUrgencyText: '⚡ Only a few units left in stock — don\'t miss out!',
-  welcomeCtaText: 'Shop Now',
-  orderCtaText: 'Track Your Order',
-  abandonedCartCtaText: 'Complete My Purchase →',
+  abandonedCartUrgencyText: 'Only a few units left in stock.',
+  welcomeCtaText: 'Shop now',
+  orderCtaText: 'Track your order',
+  abandonedCartCtaText: 'Complete purchase',
   bannerColor: '',
 };
 

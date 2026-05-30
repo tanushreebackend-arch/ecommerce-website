@@ -43,17 +43,17 @@ export default function WhoCanUse() {
       <ScrollReveal>
         <div className="container-main max-w-3xl">
           <SectionHeading centered className="mb-6">{heading}</SectionHeading>
-          <p className="text-[15px] text-gray-700 leading-relaxed font-body text-center mb-6">{intro}</p>
-          <p className="font-heading font-semibold text-gray-900 mb-4">It is especially helpful for:</p>
+          <p className="text-[15px] text-[#555555] leading-relaxed font-body text-center mb-6">{intro}</p>
+          <p className="font-heading font-normal text-[var(--color-heading)] mb-4">It is especially helpful for:</p>
           <ul className="space-y-3 mb-6">
             {audiences.map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-[15px] font-body text-gray-800">
+              <li key={i} className="flex items-start gap-3 text-[15px] font-body text-[#555555]">
                 <Check size={18} className="text-brand mt-0.5 shrink-0 stroke-[3]" />
                 <span>{item}</span>
               </li>
             ))}
           </ul>
-          <p className="text-sm text-gray-600 font-body italic text-center">{disclaimer}</p>
+          <p className="text-sm text-[#555555] font-body italic text-center">{disclaimer}</p>
         </div>
       </ScrollReveal>
     </section>

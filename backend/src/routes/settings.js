@@ -6,6 +6,7 @@ const Theme = require('../models/Theme');
 const Video = require('../models/Video');
 const Settings = require('../models/Settings');
 const Policy = require('../models/Policy');
+const { formatTheme } = require('../utils/themeFormat');
 
 const router = express.Router();
 
@@ -51,7 +52,7 @@ router.get('/all', async (req, res) => {
       product: product || {},
       packs: packs || [],
       sections: sectionsMap,
-      theme: theme || {},
+      theme: formatTheme(theme),
       videos: videos || [],
       freeShippingThreshold,
       policies: policiesMap,

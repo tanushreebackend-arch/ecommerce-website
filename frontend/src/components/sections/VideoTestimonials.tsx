@@ -29,7 +29,7 @@ export default function VideoTestimonials() {
           <SectionHeading label="REAL STORIES">
             {(content.headingLine1 as string) || 'Real Stories, Real Results'}
           </SectionHeading>
-          <p className="text-center font-heading text-2xl md:text-3xl text-[var(--color-heading)] -mt-8 mb-12">
+          <p className="text-center font-heading text-xl md:text-[28px] font-normal text-[var(--color-heading)] mb-6">
             {(content.headingLine2 as string) || 'How NOW Foods SAMe Is Changing Lives'}
           </p>
 
@@ -47,7 +47,7 @@ export default function VideoTestimonials() {
             ))}
           </div>
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-6">
             <a href={productHref} className="btn-primary inline-block px-10 py-4 uppercase tracking-wide text-sm">
               {(content.ctaText as string) || 'BUY NOW & SAVE'}
             </a>
@@ -93,12 +93,12 @@ function VideoCard({
       ) : placeholderImage ? (
         <Image src={placeholderImage} alt="" fill className="object-cover" sizes="280px" quality={100} />
       ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400 text-sm">No video</div>
+        <div className="w-full h-full flex items-center justify-center bg-[#F5F5F5] text-[#999999] text-sm">No video</div>
       )}
       {!isPlaying && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
           <div className="w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Play size={22} className="text-gray-900 ml-1" fill="currentColor" />
+            <Play size={22} className="text-[#0A0A0A] ml-1" fill="currentColor" />
           </div>
         </div>
       )}

@@ -39,20 +39,20 @@ export default function GoldStandard() {
     <section className="section-padding luxury-section-white">
       <ScrollReveal>
         <div className="container-main">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
             <div>
               <SectionHeading label="QUALITY STANDARD" centered={false}>
                 {content.heading as string}
               </SectionHeading>
-              <p className="section-body-text mb-4 !max-w-none">{content.paragraph as string}</p>
+              <p className="section-body-text mb-2 !max-w-none">{content.paragraph as string}</p>
               {(content.paragraph2 as string) && (
-                <p className="section-body-text mb-5 !max-w-none">{content.paragraph2 as string}</p>
+                <p className="section-body-text mb-2 !max-w-none">{content.paragraph2 as string}</p>
               )}
-              <p className="text-[11px] font-body uppercase tracking-[3px] text-[var(--color-secondary)] mb-3">These nutrients</p>
-              <ul className="space-y-3 mb-5">
+              <p className="section-label mb-2">These nutrients</p>
+              <ul className="space-y-2 mb-2">
                 {bullets.map((b, i) => (
                   <li key={i} className="flex items-start gap-2.5 section-body-text !max-w-none">
-                    <Check size={14} strokeWidth={1.25} className="text-[var(--color-secondary)] mt-1 shrink-0" />
+                    <Check size={14} strokeWidth={1.25} className="text-[var(--color-heading)] mt-1 shrink-0" />
                     {b}
                   </li>
                 ))}

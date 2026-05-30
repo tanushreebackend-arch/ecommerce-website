@@ -26,7 +26,7 @@ function CircularStat({ percent, text }: { percent: number; text: string }) {
   const offset = circumference - (percent / 100) * circumference;
 
   return (
-    <div className="flex gap-5 items-start py-6 border-b border-gray-200 last:border-b-0">
+    <div className="flex gap-5 items-start py-6 border-b border-[#E8E8E8] last:border-b-0">
       <div className="relative shrink-0" style={{ width: size, height: size }}>
         <svg width={size} height={size} className="-rotate-90" aria-hidden>
           <circle
@@ -34,7 +34,7 @@ function CircularStat({ percent, text }: { percent: number; text: string }) {
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="#f3f4f6"
+            stroke="#F5F5F5"
             strokeWidth={stroke}
           />
           <circle
@@ -49,11 +49,11 @@ function CircularStat({ percent, text }: { percent: number; text: string }) {
             strokeLinecap="round"
           />
         </svg>
-        <span className="absolute inset-0 flex items-center justify-center font-heading font-bold text-lg text-gray-900">
+        <span className="absolute inset-0 flex items-center justify-center font-heading font-normal text-base text-[var(--color-heading)]">
           {percent}%
         </span>
       </div>
-      <p className="text-[15px] leading-relaxed text-gray-800 font-body pt-5">{text}</p>
+      <p className="text-[15px] leading-relaxed text-[#555555] font-body pt-5">{text}</p>
     </div>
   );
 }
@@ -77,18 +77,18 @@ export default function BrandResultsSection() {
     <section className="section-padding luxury-section-white">
       <ScrollReveal>
         <div className="container-main">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             <div>
-              <h1 className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] font-bold leading-tight tracking-wide text-gray-900 mb-5">
+              <h1 className="font-heading text-2xl md:text-[28px] font-normal leading-tight tracking-wide text-[var(--color-heading)] mb-5">
                 {title}
               </h1>
-              <p className="text-[15px] md:text-base text-gray-700 leading-relaxed font-body max-w-md">
+              <p className="text-[15px] md:text-base text-[#555555] leading-relaxed font-body max-w-md">
                 {intro}
               </p>
             </div>
 
             <div>
-              <h2 className="font-heading text-xl md:text-2xl font-bold text-gray-900 mb-2">{sideHeading}</h2>
+              <h2 className="font-heading text-lg md:text-xl font-normal text-[var(--color-heading)] mb-2">{sideHeading}</h2>
               <div>
                 {stats.map((stat, i) => (
                   <CircularStat key={i} percent={stat.percent} text={stat.text} />

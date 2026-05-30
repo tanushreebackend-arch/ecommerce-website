@@ -1,60 +1,70 @@
 'use client';
 
+import { getFontFallback } from '@/lib/premiumFonts';
+
 interface ThemePreviewProps {
   theme: Record<string, string>;
 }
 
 export default function ThemePreview({ theme }: ThemePreviewProps) {
-  const primary = theme.primaryColor || '#2d6a4f';
-  const secondary = theme.secondaryColor || '#40916c';
-  const bg = theme.bgColor || '#ffffff';
-  const text = theme.textColor || '#1a1a1a';
+  const accent = theme.secondaryColor || '#000000';
+  const button = theme.primaryColor || '#000000';
+  const navbar = theme.navbarBg || '#000000';
   const headingFont = theme.headingFont || 'Inter';
-  const bodyFont = theme.bodyFont || 'Poppins';
+  const bodyFont = theme.bodyFont || 'Inter';
+  const headingFallback = getFontFallback(headingFont);
+  const bodyFallback = getFontFallback(bodyFont);
 
   return (
     <div className="card sticky top-6">
       <h2 className="font-semibold mb-4">Live Preview</h2>
-      <div className="rounded-xl overflow-hidden border shadow-sm" style={{ backgroundColor: bg, color: text }}>
-        {/* Header mockup */}
-        <div className="px-4 py-3 flex items-center justify-between border-b" style={{ backgroundColor: bg }}>
-          <span style={{ fontFamily: headingFont }} className="font-bold text-sm">Your Brand</span>
-          <div className="flex gap-3 text-xs" style={{ fontFamily: bodyFont }}>
-            <span>Shop</span>
-            <span>About</span>
-            <span style={{ color: primary }} className="font-semibold">Cart</span>
-          </div>
-        </div>
-
-        {/* Announcement bar */}
+      <div className="rounded-lg overflow-hidden border shadow-sm bg-white">
         <div
-          className="text-center text-xs py-1.5 font-medium"
-          style={{ backgroundColor: theme.announcementBg || primary, color: theme.announcementText || '#fff', fontFamily: bodyFont }}
+          className="px-4 py-2.5 flex items-center justify-between"
+          style={{ backgroundColor: accent, color: accent.toLowerCase() === '#ffffff' || accent.toLowerCase() === '#fff' ? '#000' : '#fff', fontFamily: `'${bodyFont}', ${bodyFallback}`, fontSize: 10, letterSpacing: 1.5, textTransform: 'uppercase' }}
         >
           Free shipping on orders over ₹499
         </div>
 
-        {/* Product card mockup */}
-        <div className="p-4">
-          <div className="flex gap-3">
-            <div className="w-16 h-16 rounded-lg shrink-0" style={{ backgroundColor: secondary, opacity: 0.3 }} />
-            <div className="flex-1 min-w-0">
-              <p style={{ fontFamily: headingFont }} className="font-bold text-sm truncate">Premium Supplement</p>
-              <p style={{ fontFamily: bodyFont }} className="text-xs opacity-70 mt-0.5">Daily wellness formula</p>
-              <p style={{ fontFamily: headingFont, color: primary }} className="font-bold text-sm mt-1">₹999</p>
-            </div>
+        <div className="px-4 py-3 flex items-center justify-between border-b" style={{ backgroundColor: navbar }}>
+          <span style={{ fontFamily: `'${headingFont}', ${headingFallback}`, color: '#fff' }} className="text-xs tracking-widest uppercase">
+            Your Brand
+          </span>
+          <div className="flex gap-4 text-[10px] uppercase tracking-wider" style={{ fontFamily: `'${bodyFont}', ${bodyFallback}`, color: '#fff' }}>
+            <span style={{ borderBottom: `2px solid ${accent}`, paddingBottom: 2 }}>Shop</span>
+            <span>Contact</span>
           </div>
+        </div>
+
+        <div className="p-4">
+          <p style={{ fontFamily: `'${headingFont}', ${headingFallback}`, color: '#000' }} className="text-sm font-normal mb-1">
+            Premium Supplement
+          </p>
+          <p style={{ fontFamily: `'${bodyFont}', ${bodyFallback}`, color: '#444' }} className="text-xs mb-2">
+            Daily wellness formula
+          </p>
+          <div className="w-8 h-0.5 mb-3" style={{ backgroundColor: accent }} />
+          <p style={{ fontFamily: `'${headingFont}', ${headingFallback}`, color: '#000' }} className="text-lg mb-4">
+            ₹999
+          </p>
 
           <button
             type="button"
-            className="w-full mt-4 py-2.5 rounded-lg text-white text-xs font-semibold uppercase tracking-wide"
-            style={{ backgroundColor: primary, fontFamily: bodyFont }}
+            className="w-full py-2.5 text-white text-[10px] font-medium uppercase tracking-widest mb-2"
+            style={{ backgroundColor: button, fontFamily: `'${bodyFont}', ${bodyFallback}` }}
           >
             Add to Cart
           </button>
+          <button
+            type="button"
+            className="w-full py-2.5 text-[10px] font-medium uppercase tracking-widest border border-black"
+            style={{ fontFamily: `'${bodyFont}', ${bodyFallback}`, color: '#000', backgroundColor: '#fff' }}
+          >
+            Buy Now
+          </button>
         </div>
       </div>
-      <p className="text-xs text-gray-400 mt-3">Updates in real-time as you change fonts and colors.</p>
+      <p className="text-xs text-gray-400 mt-3">Updates in real-time as you change colors and fonts.</p>
     </div>
   );
 }

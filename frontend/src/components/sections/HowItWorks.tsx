@@ -47,16 +47,16 @@ export default function HowItWorks() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
             <div className="flex flex-col justify-center py-2">
               <SectionHeading subheading={content.subheading as string}>{content.heading as string}</SectionHeading>
-              <p className="text-[15px] text-gray-700 leading-relaxed mb-4 font-body -mt-4">{content.body as string}</p>
+              <p className="text-[15px] text-[#555555] leading-relaxed mb-4 font-body -mt-4">{content.body as string}</p>
               {Boolean(content.bodySecondary) && (
-                <p className="text-[15px] text-gray-700 leading-relaxed mb-5 font-body">{content.bodySecondary as string}</p>
+                <p className="text-[15px] text-[#555555] leading-relaxed mb-5 font-body">{content.bodySecondary as string}</p>
               )}
               <ul className="space-y-4 mb-5">
                 {bullets.map((b, i) => {
                   const Icon = BULLET_ICONS[i % BULLET_ICONS.length];
                   return (
-                    <li key={i} className="flex items-start gap-3 text-[15px] text-gray-800 font-body">
-                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand/10">
+                    <li key={i} className="flex items-start gap-3 text-[15px] text-[#555555] font-body">
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--color-card-border)] bg-white">
                         <Icon size={16} className="text-brand" />
                       </span>
                       <span className="pt-1" dangerouslySetInnerHTML={{ __html: b.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
@@ -65,7 +65,7 @@ export default function HowItWorks() {
                 })}
               </ul>
               {content.closingText && (
-                <p className="text-[15px] text-gray-700 leading-relaxed font-body">{content.closingText as string}</p>
+                <p className="text-[15px] text-[#555555] leading-relaxed font-body">{content.closingText as string}</p>
               )}
             </div>
             {Boolean(content.image) && (

@@ -5,95 +5,130 @@ import { useSettings } from '@/context/SettingsContext';
 import PaymentIcons from '@/components/PaymentIcons';
 import { BRAND_PATH } from '@/lib/routes';
 
+function InstagramIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M14 8h3V4h-3c-2.8 0-5 2.2-5 5v2H6v4h3v8h4v-8h3l1-4h-4V9c0-.6.4-1 1-1z" />
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M18.9 2H22l-6.8 7.8L23 22h-6.7l-4.7-6.1L6.6 22H2.5l7.3-8.4L1 2h6.9l4.2 5.5L18.9 2zm-1.2 18h1.9L7.1 3.9H5.1L17.7 20z" />
+    </svg>
+  );
+}
+
+const QUICK_LINKS = [
+  { label: 'Shop', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Digital Products', href: '/digital-products' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Track Your Order', href: '/track-order' },
+  { label: 'Refund Policy', href: '/refund-policy' },
+  { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'Terms of Service', href: '/terms-of-service' },
+  { label: 'Shipping Policy', href: '/shipping-policy' },
+];
+
+const SOCIAL_LINKS = [
+  { label: 'Instagram', href: 'https://instagram.com', Icon: InstagramIcon },
+  { label: 'Facebook', href: 'https://facebook.com', Icon: FacebookIcon },
+  { label: 'Twitter', href: 'https://twitter.com', Icon: XIcon },
+];
+
 export default function Footer() {
   const { settings } = useSettings();
   const footer = settings?.sections?.footer?.content as Record<string, string> | undefined;
   const product = settings?.product as Record<string, unknown> | undefined;
   const brandName = ((product?.brandName as string) || 'NOW FOODS').toUpperCase();
 
-  const links = [
-    { label: 'Shop', href: '/' },
-    { label: 'Track Your Order', href: '/track-order' },
-    { label: 'Refund Policy', href: '/refund-policy' },
-    { label: 'Privacy Policy', href: '/privacy-policy' },
-    { label: 'Terms of Service', href: '/terms-of-service' },
-    { label: 'Shipping Policy', href: '/shipping-policy' },
-    { label: 'Contact', href: '/contact' },
-  ];
+  const tagline =
+    footer?.tagline ||
+    "Premium daily wellness supplements crafted with nature's finest ingredients for energy, immunity, and vitality.";
 
   return (
-    <footer className="relative mt-0">
-      <div style={{ overflow: 'hidden', lineHeight: 0, marginBottom: '-2px' }}>
-        <svg
-          viewBox="0 24 150 28"
-          preserveAspectRatio="none"
-          style={{ display: 'block', width: '200%', height: '60px' }}
-          aria-hidden
-        >
-          <defs>
-            <path id="wave" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18v44h-352z" />
-          </defs>
-          <g className="wave-parallax">
-            <use href="#wave" x="48" y="0" fill="rgba(201,168,76,0.7)" />
-            <use href="#wave" x="48" y="3" fill="rgba(201,168,76,0.5)" />
-            <use href="#wave" x="48" y="5" fill="rgba(201,168,76,0.3)" />
-            <use href="#wave" x="48" y="7" fill="#c9a84c" />
-          </g>
-        </svg>
-      </div>
-
-      <div className="footer-luxury pt-14 pb-10">
-        <div className="container-main">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-14">
-            <div>
-              <Link href={BRAND_PATH} className="font-heading text-3xl font-light mb-4 inline-block tracking-wide text-[var(--color-primary-foreground)]">
-                {brandName}
-              </Link>
-              <p className="text-sm leading-[1.8] font-body font-light opacity-85 max-w-xs">
-                Premium daily wellness supplements crafted with nature&apos;s finest ingredients for energy, immunity, and vitality.
-              </p>
-            </div>
-
-            <div>
-              <h4>Quick Links</h4>
-              <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.href + link.label}>
-                    <Link href={link.href} className="text-sm font-body font-light">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4>Newsletter</h4>
-              <p className="text-sm font-body font-light opacity-85 mb-4">Exclusive offers and wellness insights.</p>
-              <div className="flex flex-col sm:flex-row gap-4 sm:items-end">
-                <input
-                  type="email"
-                  placeholder={footer?.newsletterPlaceholder || 'Your email address'}
-                  className="input-luxury flex-1 bg-transparent text-[var(--color-primary-foreground)] placeholder:opacity-50 border-b border-[var(--color-primary-foreground)]/40 focus:border-[var(--color-secondary)]"
-                />
-                <button className="btn-secondary shrink-0 py-3 px-6 text-[11px]">
-                  {footer?.newsletterButton || 'Subscribe'}
-                </button>
-              </div>
+    <footer className="footer-premium">
+      <div className="container-main footer-premium-main">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-10">
+          {/* Brand */}
+          <div>
+            <Link href={BRAND_PATH} className="footer-brand-name">
+              {brandName}
+            </Link>
+            <p className="footer-tagline">{tagline}</p>
+            <div className="footer-social">
+              {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="footer-social-link"
+                >
+                  <Icon />
+                </a>
+              ))}
             </div>
           </div>
 
-          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <PaymentIcons className="payment-muted [&>div]:border-white/20 [&>div]:bg-white/5" />
+          {/* Quick Links */}
+          <div>
+            <h4 className="footer-col-heading">Quick Links</h4>
+            <span className="footer-heading-line" aria-hidden />
+            <ul className="footer-links">
+              {QUICK_LINKS.map((link) => (
+                <li key={link.href + link.label}>
+                  <Link href={link.href}>{link.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h4 className="footer-col-heading">Newsletter</h4>
+            <span className="footer-heading-line" aria-hidden />
+            <p className="footer-newsletter-text">
+              {footer?.newsletterText || 'Exclusive offers and wellness insights delivered to your inbox.'}
+            </p>
+            <form
+              className="footer-newsletter-form"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                type="email"
+                placeholder={footer?.newsletterPlaceholder || 'Your email address'}
+                className="footer-newsletter-input"
+                aria-label="Email address"
+              />
+              <button type="submit" className="footer-subscribe-btn">
+                {footer?.newsletterButton || 'Subscribe'}
+              </button>
+            </form>
           </div>
         </div>
       </div>
 
-      <div className="footer-bottom-bar py-4">
-        <div className="container-main text-center">
-          <p className="text-[11px] font-body font-light opacity-60 tracking-wide">
+      <div className="footer-premium-bottom">
+        <div className="container-main footer-premium-bottom-inner">
+          <p className="footer-copyright">
             {footer?.copyright || `© ${new Date().getFullYear()} ${brandName}. All rights reserved.`}
           </p>
+          <PaymentIcons />
         </div>
       </div>
     </footer>

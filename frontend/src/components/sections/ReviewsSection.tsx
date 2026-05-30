@@ -59,17 +59,17 @@ export default function ReviewsSection() {
           <SectionHeading label="TESTIMONIALS">{heading}</SectionHeading>
 
           <ScrollReveal stagger>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               {reviews.slice(0, 3).map((review) => (
-                <div key={review._id} className="luxury-card p-8 md:p-10 text-left relative">
+                <div key={review._id} className="luxury-card p-6 md:p-8 text-left relative">
                   <span className="review-quote-mark absolute top-4 left-6 leading-none" aria-hidden>&ldquo;</span>
-                  <p className="font-heading text-lg md:text-xl mb-4 mt-8 text-[var(--color-heading)]">{review.title}</p>
-                  <div className="flex gap-1 mb-5">
+                  <p className="font-heading text-base md:text-lg font-normal mb-2 mt-6 text-[var(--color-heading)]">{review.title}</p>
+                  <div className="flex gap-1 mb-3">
                     {Array.from({ length: 5 }).map((_, j) => (
-                      <Star key={j} size={16} strokeWidth={1} className={j < review.rating ? 'star-gold' : 'text-[var(--color-card-border)]'} />
+                      <Star key={j} size={16} strokeWidth={1} className={j < review.rating ? 'star-fill' : 'text-[var(--color-card-border)]'} />
                     ))}
                   </div>
-                  <p className="text-sm md:text-[15px] text-[var(--color-text-secondary)] leading-[1.8] font-body font-light mb-8">
+                  <p className="text-sm md:text-[15px] text-[var(--color-text-secondary)] leading-[1.8] font-body font-light mb-4">
                     {review.text}
                   </p>
                   <p className="reviewer-name text-base text-[var(--color-heading)]">{review.name}</p>
@@ -82,19 +82,19 @@ export default function ReviewsSection() {
           </ScrollReveal>
 
           <div className="flex flex-col items-center">
-            <button type="button" onClick={() => setShowForm(!showForm)} className="btn-outline px-10 py-4 mb-8">
+            <button type="button" onClick={() => setShowForm(!showForm)} className="btn-outline px-10 py-4 mb-4">
               {showForm ? 'Cancel' : 'Write a Review'}
             </button>
 
             {showForm && (
-              <form onSubmit={handleSubmit} className="max-w-md w-full mx-auto text-left space-y-5 luxury-card p-8 mb-10">
+              <form onSubmit={handleSubmit} className="max-w-md w-full mx-auto text-left space-y-4 luxury-card p-6 mb-6">
                 <input placeholder="Name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input-luxury-box w-full" />
                 <input type="email" placeholder="Email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="input-luxury-box w-full" />
                 <input placeholder="Review Title" required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="input-luxury-box w-full" />
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((r) => (
                     <button key={r} type="button" onClick={() => setForm({ ...form, rating: r })}>
-                      <Star size={20} strokeWidth={1} className={r <= form.rating ? 'star-gold' : 'text-[var(--color-card-border)]'} />
+                      <Star size={20} strokeWidth={1} className={r <= form.rating ? 'star-fill' : 'text-[var(--color-card-border)]'} />
                     </button>
                   ))}
                 </div>

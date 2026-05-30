@@ -106,6 +106,38 @@ export const adminApi = {
   getEmailSettings: () => fetchAPI('/api/admin/emails/settings'),
   updateEmailSettings: (data: object) =>
     fetchAPI('/api/admin/emails/settings', { method: 'PUT', body: JSON.stringify(data) }),
+  getEmailPreview: async (type: string) => {
+    const res = await fetch(`${API_URL}/api/admin/emails/preview/${type}?v=2`, {
+      credentials: 'include',
+      cache: 'no-store',
+    });
+    const text = await res.text();
+    if (!res.ok) {
+      try {
+        const data = JSON.parse(text);
+        throw new Error(data.message || 'Preview failed');
+      } catch (err) {
+        if (err instanceof Error && err.message !== 'Preview failed') throw err;
+        throw new Error(text || 'Preview failed');
+      }
+    }
+    return text;
+  },
+  getAllBlogs: () => fetchAPI('/api/blogs/all'),
+  createBlog: (data: object) => fetchAPI('/api/blogs', { method: 'POST', body: JSON.stringify(data) }),
+  updateBlog: (id: string, data: object) => fetchAPI(`/api/blogs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteBlog: (id: string) => fetchAPI(`/api/blogs/${id}`, { method: 'DELETE' }),
+  uploadBlogCover: (formData: FormData) => fetchAPI('/api/admin/blogs/cover-image', { method: 'POST', body: formData }),
+  getAllDigitalProducts: () => fetchAPI('/api/digital-products/all'),
+  getDigitalProduct: (id: string) => fetchAPI(`/api/digital-products/manage/${id}`),
+  createDigitalProduct: (data: object) => fetchAPI('/api/digital-products', { method: 'POST', body: JSON.stringify(data) }),
+  updateDigitalProduct: (id: string, data: object) =>
+    fetchAPI(`/api/digital-products/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteDigitalProduct: (id: string) => fetchAPI(`/api/digital-products/${id}`, { method: 'DELETE' }),
+  uploadDigitalProductFile: (formData: FormData) =>
+    fetchAPI('/api/digital-products/upload-file', { method: 'POST', body: formData }),
+  uploadDigitalProductCover: (formData: FormData) =>
+    fetchAPI('/api/digital-products/upload-cover', { method: 'POST', body: formData }),
 };
 
 export default adminApi;

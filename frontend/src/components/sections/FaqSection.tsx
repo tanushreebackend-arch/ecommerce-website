@@ -40,7 +40,7 @@ export default function FaqSection() {
   const { heading, items } = useFaqItems();
 
   return (
-    <section className="section-padding bg-[#f7f8f5]">
+    <section className="section-padding luxury-section-white">
       <ScrollReveal>
         <div className="container-main max-w-3xl">
           <h2 className="section-heading text-center mb-8">{heading}</h2>

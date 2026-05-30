@@ -8,6 +8,7 @@ import { useSettings } from '@/context/SettingsContext';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import { getFreeShippingThreshold } from '@/lib/shipping';
+import PaymentIcons from '@/components/PaymentIcons';
 
 declare global {
   interface Window {
@@ -154,7 +155,7 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-500 mb-4">Your cart is empty</p>
+          <p className="text-[#999999] mb-4">Your cart is empty</p>
           <a href="/" className="btn-primary">Continue Shopping</a>
         </div>
       </div>
@@ -164,17 +165,17 @@ export default function CheckoutPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <h1 className="text-2xl font-bold">Checkout</h1>
+        <h1 className="page-heading">Checkout</h1>
 
         <div className="flex gap-3">
-          <button type="button" className="flex-1 py-3 border-2 rounded-lg font-semibold text-sm" style={{ borderColor: 'var(--color-primary)' }}>
+          <button type="button" className="flex-1 py-3 border-2 rounded-lg font-medium text-sm" style={{ borderColor: 'var(--color-primary)' }}>
             Razorpay
           </button>
-          <button type="button" className="flex-1 py-3 border rounded-lg font-semibold text-sm">UPI</button>
+          <button type="button" className="flex-1 py-3 border rounded-lg font-medium text-sm">UPI</button>
         </div>
 
         <div className="relative text-center">
-          <span className="bg-white px-4 text-gray-400 text-sm relative z-10">OR</span>
+          <span className="bg-white px-4 text-[#999999] text-sm relative z-10">OR</span>
           <div className="absolute top-1/2 left-0 right-0 border-t" />
         </div>
 
@@ -185,7 +186,7 @@ export default function CheckoutPage() {
         </div>
 
         <fieldset className="space-y-4">
-          <legend className="font-semibold text-lg">Delivery</legend>
+          <legend className="section-label mb-2 block">Delivery</legend>
           <select value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })}
             className="w-full px-4 py-3 border rounded-lg">
             <option>India</option>
@@ -213,7 +214,7 @@ export default function CheckoutPage() {
         </fieldset>
 
         <fieldset className="space-y-3">
-          <legend className="font-semibold text-lg">Payment</legend>
+          <legend className="section-label mb-2 block">Payment</legend>
           {['razorpay', 'upi', 'cod'].map((method) => (
             <label key={method} className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer">
               <input type="radio" name="payment" checked={paymentMethod === method} onChange={() => setPaymentMethod(method)} />
@@ -222,27 +223,30 @@ export default function CheckoutPage() {
           ))}
         </fieldset>
 
-        <button type="submit" disabled={loading} className="btn-primary w-full py-4 text-lg">
+        <button type="submit" disabled={loading} className="btn-primary w-full py-4">
           {loading ? 'Processing...' : `Pay ₹${total.toLocaleString('en-IN')}`}
         </button>
+        <div className="flex justify-center pt-2">
+          <PaymentIcons />
+        </div>
       </form>
 
       {/* Order Summary */}
       <div className="lg:sticky lg:top-24 h-fit">
-        <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
-          <h2 className="font-bold text-lg">Order Summary</h2>
+        <div className="bg-[#F5F5F5] rounded-2xl p-6 space-y-4">
+          <h2 className="section-label mb-2">Order Summary</h2>
           {items.map((item) => (
             <div key={item.id} className="flex gap-3">
               <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-white">
                 {item.image && <Image src={item.image} alt="" fill className="object-cover" />}
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-gray-600 text-white text-xs rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#555555] text-white text-xs rounded-full flex items-center justify-center">
                   {item.quantity}
                 </span>
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-sm">{item.name}</p>
-                <p className="text-xs text-gray-500">{item.packLabel}</p>
-                <p className="text-sm font-bold">₹{(item.price * item.quantity).toLocaleString('en-IN')}</p>
+                <p className="product-card-name truncate">{item.name}</p>
+                <p className="text-xs text-[#999999]">{item.packLabel}</p>
+                <p className="product-card-price">₹{(item.price * item.quantity).toLocaleString('en-IN')}</p>
               </div>
             </div>
           ))}
@@ -251,12 +255,12 @@ export default function CheckoutPage() {
           <div className="rounded-xl border border-[var(--color-card-border)] bg-white p-4 space-y-3">
             <div className="flex items-center gap-2">
               <Ticket size={18} className="text-brand" />
-              <p className="text-sm font-semibold text-gray-900">Coupons &amp; Offers</p>
+              <p className="text-sm font-normal text-[#0A0A0A]">Coupons &amp; Offers</p>
             </div>
 
             {availableCoupons.length > 0 ? (
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">Select an offer</label>
+                <label className="text-xs text-[#999999] mb-1 block">Select an offer</label>
                 <select
                   value={appliedCode}
                   onChange={(e) => handleSelectCoupon(e.target.value)}
@@ -275,7 +279,7 @@ export default function CheckoutPage() {
                 </select>
               </div>
             ) : (
-              <p className="text-xs text-gray-500">No active coupons right now. Enter a code below if you have one.</p>
+              <p className="text-xs text-[#999999]">No active coupons right now. Enter a code below if you have one.</p>
             )}
 
             <div className="flex gap-2">
@@ -299,14 +303,14 @@ export default function CheckoutPage() {
             </div>
 
             {appliedCode && discount > 0 && (
-              <div className="flex items-center justify-between gap-2 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2">
-                <span className="text-xs font-bold text-emerald-800">
+              <div className="flex items-center justify-between gap-2 border border-[var(--color-card-border)] bg-white px-3 py-2">
+                <span className="text-xs font-medium text-[var(--color-heading)]">
                   🏷️ {appliedCode} applied — you save ₹{discount.toLocaleString('en-IN')}
                 </span>
                 <button
                   type="button"
                   onClick={removeCoupon}
-                  className="p-1 rounded hover:bg-emerald-100 text-emerald-700"
+                  className="p-1 hover:bg-[#F5F5F5] text-[var(--color-heading)]"
                   aria-label="Remove coupon"
                 >
                   <X size={14} />
@@ -318,15 +322,18 @@ export default function CheckoutPage() {
           <div className="space-y-2 pt-4 border-t text-sm">
             <div className="flex justify-between"><span>Subtotal</span><span>₹{subtotal.toLocaleString('en-IN')}</span></div>
             <div className="flex justify-between"><span>Shipping</span><span>{shippingCost === 0 ? 'FREE' : `₹${shippingCost}`}</span></div>
-            {discount > 0 && <div className="flex justify-between text-green-600"><span>Discount</span><span>-₹{discount.toLocaleString('en-IN')}</span></div>}
+            {discount > 0 && <div className="flex justify-between text-[var(--color-heading)]"><span>Discount</span><span>-₹{discount.toLocaleString('en-IN')}</span></div>}
             {savings > 0 && (
-              <div className="flex justify-between font-semibold" style={{ color: 'var(--color-secondary)' }}>
+              <div className="flex justify-between font-normal text-[var(--color-heading)]">
                 <span>Total Savings</span><span>₹{savings.toLocaleString('en-IN')}</span>
               </div>
             )}
-            <div className="flex justify-between font-bold text-lg pt-2 border-t">
+            <div className="flex justify-between font-medium text-base pt-2 border-t">
               <span>Total</span><span>₹{total.toLocaleString('en-IN')}</span>
             </div>
+          </div>
+          <div className="flex justify-center pt-4">
+            <PaymentIcons />
           </div>
         </div>
       </div>

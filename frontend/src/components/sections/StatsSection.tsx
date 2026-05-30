@@ -32,12 +32,12 @@ export default function StatsSection() {
   const bgImage = (content.backgroundImage as string) || productImages[2]?.url || productImages[0]?.url;
 
   return (
-    <section className="section-padding luxury-section-dark luxury-texture">
+    <section className="section-padding luxury-section-white luxury-texture">
       <ScrollReveal>
         <div className="container-main">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
             {bgImage && (
-              <div className="relative min-h-[360px] lg:min-h-[520px] overflow-hidden luxury-card order-2 lg:order-1">
+              <div className="relative min-h-[280px] lg:min-h-[400px] overflow-hidden luxury-card order-2 lg:order-1">
                 <Image
                   src={bgImage}
                   alt="Wellness lifestyle"
@@ -53,16 +53,16 @@ export default function StatsSection() {
               <SectionHeading label="THE SCIENCE" centered={false}>
                 {content.heading as string}
               </SectionHeading>
-              <div className="space-y-5 section-body-text !max-w-none">
+              <div className="space-y-2 section-body-text !max-w-none">
                 <p>{content.paragraph as string}</p>
                 <p>
-                  <strong className="font-heading font-semibold text-2xl md:text-3xl text-[var(--color-secondary)]">
+                  <strong className="font-heading font-medium text-xl md:text-2xl text-[var(--color-heading)]">
                     {stat1?.number}
                   </strong>{' '}
                   {stat1?.text?.replace(/^\d+%\s*/, '') || stat1?.text}
                 </p>
                 <p>
-                  <strong className="font-heading font-semibold text-2xl md:text-3xl text-[var(--color-secondary)]">
+                  <strong className="font-heading font-medium text-xl md:text-2xl text-[var(--color-heading)]">
                     {stat2?.number}
                   </strong>{' '}
                   {stat2?.text?.replace(/^\d+%\s*/, '') || stat2?.text}

@@ -1,3 +1,5 @@
+const CLOUDINARY_FOLDER = 'ecommerce-uploads';
+
 const isCloudinaryConfigured = () => {
   const name = (process.env.CLOUDINARY_CLOUD_NAME || '').trim();
   const key = (process.env.CLOUDINARY_API_KEY || '').trim();
@@ -13,7 +15,7 @@ const uploadToCloudinary = (buffer, options = {}) => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: 'ecommerce',
+        folder: CLOUDINARY_FOLDER,
         resource_type: options.resourceType || 'auto',
         ...options,
       },
@@ -26,4 +28,4 @@ const uploadToCloudinary = (buffer, options = {}) => {
   });
 };
 
-module.exports = { uploadToCloudinary, isCloudinaryConfigured };
+module.exports = { uploadToCloudinary, isCloudinaryConfigured, CLOUDINARY_FOLDER };

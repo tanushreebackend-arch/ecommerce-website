@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useSettings } from '@/context/SettingsContext';
 import ScrollReveal from '@/components/ScrollReveal';
 
-const ARROW = '#D4A017';
 const BOWL_DEFAULT = 'https://images.unsplash.com/photo-1550572017-edd951b55104?w=400&fit=crop';
 
 const VB = 640;
@@ -138,7 +137,7 @@ function BowlInfographic({
         {/* Labels first (behind) with white backing — arrows on top in the gap only */}
         {(Object.keys(LABEL_STYLE) as Array<keyof typeof LABEL_STYLE>).map((pos) => (
           <div key={pos} className={`absolute z-30 pointer-events-none ${LABEL_STYLE[pos]}`}>
-            <p className={`text-[11px] sm:text-[12px] font-body text-gray-800 ${LABEL_BOX}`}>
+            <p className={`text-[11px] sm:text-[12px] font-body text-[#555555] ${LABEL_BOX}`}>
               {getLabel(pos)}
             </p>
           </div>
@@ -159,7 +158,7 @@ function BowlInfographic({
               refY="3.5"
               orient="auto"
             >
-              <polygon points="0 0, 9 3.5, 0 7" fill={ARROW} />
+              <polygon points="0 0, 9 3.5, 0 7" fill="var(--accent-color)" />
             </marker>
           </defs>
           {ARROW_PATHS.map(({ key, d }) => (
@@ -167,7 +166,7 @@ function BowlInfographic({
               key={key}
               d={d}
               fill="none"
-              stroke={ARROW}
+              stroke="var(--accent-color)"
               strokeWidth="2"
               strokeLinecap="round"
               markerEnd={`url(#${markerId})`}
@@ -192,7 +191,7 @@ function BowlInfographic({
         </div>
       </div>
 
-      <p className="mt-4 font-heading font-bold text-xl sm:text-2xl text-gray-900 text-center tracking-tight">
+      <p className="mt-4 font-heading font-normal text-lg text-[var(--color-heading)] text-center tracking-tight">
         {brandName}
       </p>
     </div>
@@ -230,28 +229,30 @@ export default function Comparison() {
   const introSecondary = isLegacyContent ? DEFAULT_INTRO_SECONDARY : (content.introSecondary as string) || DEFAULT_INTRO_SECONDARY;
 
   return (
-    <section className="section-padding luxury-section-cream luxury-texture overflow-hidden">
+    <section className="section-padding luxury-section-white luxury-texture overflow-hidden">
       <ScrollReveal>
         <div className="container-main">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 xl:gap-20 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             <div className="order-1">
-              <h2 className="font-heading text-2xl md:text-3xl lg:text-[2rem] font-bold text-gray-900 mb-6 leading-tight">
+              <p className="section-subheading mb-2">WHY DIFFERENT</p>
+              <div className="heading-decor mb-2" aria-hidden />
+              <h2 className="font-heading text-xl md:text-2xl lg:text-[28px] font-normal text-[var(--color-heading)] mb-3 leading-tight">
                 {heading}
               </h2>
-              <div className="space-y-4 text-[15px] leading-relaxed font-body text-gray-800 mb-8">
+              <div className="space-y-2 text-[15px] leading-relaxed font-body text-[#555555] mb-4">
                 <p dangerouslySetInnerHTML={{ __html: renderBold(intro) }} />
                 <p dangerouslySetInnerHTML={{ __html: renderBold(introSecondary) }} />
               </div>
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {categories.map((cat, i) => (
                   <div key={i}>
-                    <h3 className="font-heading font-bold text-xs sm:text-sm uppercase tracking-wide text-gray-900 mb-2">
+                    <h3 className="font-heading font-normal text-xs uppercase tracking-[1.5px] text-[var(--color-heading)] mb-2">
                       {cat.name}:
                     </h3>
                     <ul className="space-y-2">
                       {(cat.bullets || []).map((bullet, j) => (
-                        <li key={j} className="flex items-start gap-2.5 text-[15px] font-body text-gray-800 leading-relaxed">
-                          <span className="shrink-0 text-base leading-none mt-0.5" style={{ color: ARROW }}>
+                        <li key={j} className="flex items-start gap-2.5 text-[15px] font-body text-[#555555] leading-relaxed">
+                          <span className="shrink-0 text-base leading-none mt-0.5 text-[var(--accent-color)]">
                             ●
                           </span>
                           {bullet}

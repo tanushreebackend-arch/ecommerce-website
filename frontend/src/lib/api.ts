@@ -17,6 +17,7 @@ async function fetchAPI(endpoint: string, options: RequestInit = {}) {
 
 export const api = {
   getSettings: () => fetchAPI('/api/settings/all'),
+  getTheme: () => fetchAPI('/api/theme'),
   getPublishedReviews: () => fetchAPI('/api/reviews/published'),
   submitReview: (data: object) => fetchAPI('/api/reviews', { method: 'POST', body: JSON.stringify(data) }),
   submitEnquiry: (data: object) => fetchAPI('/api/enquiries', { method: 'POST', body: JSON.stringify(data) }),
@@ -40,6 +41,12 @@ export const api = {
   getMe: () => fetchAPI('/api/auth/user/me'),
   syncCart: (items: object[]) =>
     fetchAPI('/api/cart/sync', { method: 'PUT', body: JSON.stringify({ items }) }),
+  getBlogs: () => fetchAPI('/api/blogs'),
+  getBlog: (slug: string) => fetchAPI(`/api/blogs/${slug}`),
+  getDigitalProducts: () => fetchAPI('/api/digital-products'),
+  getDigitalProduct: (id: string) => fetchAPI(`/api/digital-products/${id}`),
+  purchaseDigitalProduct: (id: string, data: object) =>
+    fetchAPI(`/api/digital-products/${id}/purchase`, { method: 'POST', body: JSON.stringify(data) }),
 };
 
 export default api;

@@ -9,7 +9,9 @@ import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/cart/CartDrawer';
 import CartSync from '@/components/cart/CartSync';
 import AnnouncementBar from '@/components/layout/AnnouncementBar';
+import SmoothScroll from '@/components/SmoothScroll';
 import ChatWidget from '@/components/ChatWidget';
+import { fetchTheme, themeToCssProperties } from '@/lib/theme';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -30,12 +32,19 @@ export const metadata: Metadata = {
   description: 'NOW Foods SAMe 400 mg supports mood, nervous system health, and joint comfort. Stabilized formula, maximum strength.',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const theme = await fetchTheme();
+
   return (
-    <html lang="en" className={`${cormorant.variable} ${jost.variable}`}>
+    <html
+      lang="en"
+      className={`scroll-smooth ${cormorant.variable} ${jost.variable}`}
+      style={themeToCssProperties(theme)}
+    >
       <body className="font-body antialiased">
         <SettingsProvider>
-          <ThemeProvider />
+          <ThemeProvider initialTheme={theme} />
+          <SmoothScroll />
           <AnnouncementBar />
           <Navbar />
           <main>{children}</main>

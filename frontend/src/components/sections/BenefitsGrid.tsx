@@ -57,10 +57,10 @@ export default function BenefitsGrid() {
           <div className="space-y-8">
             {cards.map((card, i) => (
               <div key={i} className="text-center sm:text-left">
-                <h3 className="font-heading font-bold text-lg md:text-xl text-gray-900 mb-2">
+                <h3 className="font-heading font-normal text-base text-[var(--color-heading)] mb-2">
                   {card.icon} {card.title}
                 </h3>
-                <p className="text-[15px] text-gray-700 leading-relaxed font-body">{card.description}</p>
+                <p className="text-[15px] text-[#555555] leading-relaxed font-body">{card.description}</p>
               </div>
             ))}
           </div>

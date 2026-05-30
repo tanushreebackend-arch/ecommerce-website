@@ -3,6 +3,7 @@ const Product = require('../models/Product');
 const Pack = require('../models/Pack');
 const Section = require('../models/Section');
 const Theme = require('../models/Theme');
+const { formatTheme } = require('../utils/themeFormat');
 const Coupon = require('../models/Coupon');
 const Review = require('../models/Review');
 const Order = require('../models/Order');
@@ -17,9 +18,10 @@ const {
   welcomeEmailTemplate,
   orderConfirmationTemplate,
   abandonedCartTemplate,
+  digitalProductPurchaseTemplate,
 } = require('../utils/emailTemplates');
 const upload = require('../middleware/upload');
-const { uploadMedia, deleteLocalFile } = require('../utils/fileUpload');
+const { uploadMedia, deleteMediaFile } = require('../utils/fileUpload');
 
 const router = express.Router();
 
@@ -163,7 +165,7 @@ router.put('/product/images/:index/replace', upload.single('image'), async (req,
     if (!req.file) return res.status(400).json({ message: 'No image provided' });
 
     const old = product.images[index];
-    deleteLocalFile(old?.publicId);
+    deleteMediaFile(old?.publicId, old?.url);
 
     const result = await uploadMedia(req.file, { resourceType: 'image' });
     product.images[index] = {
@@ -189,7 +191,7 @@ router.delete('/product/images/:index', async (req, res) => {
     }
 
     const removed = product.images[index];
-    deleteLocalFile(removed?.publicId);
+    await deleteMediaFile(removed?.publicId, removed?.url);
     product.images.splice(index, 1);
     product.images.forEach((img, i) => { img.sortOrder = i; });
     await product.save();
@@ -226,7 +228,7 @@ router.post('/product/logo', upload.single('logo'), async (req, res) => {
     if (!product) return res.status(404).json({ message: 'Product not found' });
     if (!req.file) return res.status(400).json({ message: 'No logo provided' });
 
-    if (product.logo?.publicId) deleteLocalFile(product.logo.publicId);
+    if (product.logo?.publicId) await deleteMediaFile(product.logo.publicId, product.logo.url);
 
     const result = await uploadMedia(req.file, { resourceType: 'image' });
     product.logo = { url: result.url, publicId: result.publicId };
@@ -243,7 +245,7 @@ router.post('/product/comparison-image', upload.single('image'), async (req, res
     if (!product) return res.status(404).json({ message: 'Product not found' });
     if (!req.file) return res.status(400).json({ message: 'No image provided' });
 
-    if (product.comparisonImage?.publicId) deleteLocalFile(product.comparisonImage.publicId);
+    if (product.comparisonImage?.publicId) await deleteMediaFile(product.comparisonImage.publicId, product.comparisonImage.url);
 
     const result = await uploadMedia(req.file, { resourceType: 'image' });
     product.comparisonImage = { url: result.url, publicId: result.publicId };
@@ -261,7 +263,7 @@ router.delete('/product/images/by-public-id/:publicId(*)', async (req, res) => {
     const index = product.images.findIndex((img) => img.publicId === publicId);
     if (index === -1) return res.status(404).json({ message: 'Image not found' });
 
-    deleteLocalFile(product.images[index]?.publicId);
+    await deleteMediaFile(product.images[index]?.publicId, product.images[index]?.url);
     product.images.splice(index, 1);
     await product.save();
     res.json(product);
@@ -413,7 +415,7 @@ router.post('/sections/:name/image', upload.single('image'), async (req, res) =>
 router.get('/theme', async (req, res) => {
   try {
     const theme = await Theme.findOne();
-    res.json(theme || {});
+    res.json(formatTheme(theme));
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -421,13 +423,19 @@ router.get('/theme', async (req, res) => {
 
 router.put('/theme', async (req, res) => {
   try {
+    const body = { ...req.body };
+    // Map normalized names to schema fields if sent from admin
+    if (body.buttonColor && !body.primaryColor) body.primaryColor = body.buttonColor;
+    if (body.accentColor && !body.secondaryColor) body.secondaryColor = body.accentColor;
+    if (body.navbarColor && !body.navbarBg) body.navbarBg = body.navbarColor;
+
     let theme = await Theme.findOne();
-    if (!theme) theme = await Theme.create(req.body);
+    if (!theme) theme = await Theme.create(body);
     else {
-      Object.assign(theme, req.body);
+      Object.assign(theme, body);
       await theme.save();
     }
-    res.json(theme);
+    res.json(formatTheme(theme));
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -619,7 +627,7 @@ router.get('/videos', async (req, res) => {
   }
 });
 
-router.put('/videos/:slot', upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), async (req, res) => {
+router.put('/videos/:slot', upload.videoUpload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), async (req, res) => {
   try {
     const slot = parseInt(req.params.slot);
     let videoData = {};
@@ -723,9 +731,6 @@ router.get('/emails/preview/:type', async (req, res) => {
       html = welcomeEmailTemplate({
         name: 'Alex',
         brandName: ctx.brandName,
-        brandColor: ctx.brandColor,
-        bannerColor: ctx.bannerColor,
-        footerBg: ctx.footerBg,
         logoUrl: ctx.logoUrl,
         websiteUrl: ctx.websiteUrl,
         copyright: ctx.copyright,
@@ -753,9 +758,6 @@ router.get('/emails/preview/:type', async (req, res) => {
           pincode: '560001',
         },
         brandName: ctx.brandName,
-        brandColor: ctx.brandColor,
-        bannerColor: ctx.bannerColor,
-        footerBg: ctx.footerBg,
         logoUrl: ctx.logoUrl,
         trackOrderUrl: `${ctx.websiteUrl}/track-order`,
         websiteUrl: ctx.websiteUrl,
@@ -775,9 +777,6 @@ router.get('/emails/preview/:type', async (req, res) => {
           },
         ],
         brandName: ctx.brandName,
-        brandColor: ctx.brandColor,
-        bannerColor: ctx.bannerColor,
-        footerBg: ctx.footerBg,
         logoUrl: ctx.logoUrl,
         checkoutUrl: `${ctx.websiteUrl}/checkout`,
         websiteUrl: ctx.websiteUrl,
@@ -786,12 +785,37 @@ router.get('/emails/preview/:type', async (req, res) => {
         urgencyText: ctx.emailSettings.abandonedCartUrgencyText,
         ctaText: ctx.emailSettings.abandonedCartCtaText,
       });
+    } else if (type === 'digital') {
+      html = digitalProductPurchaseTemplate({
+        brandName: ctx.brandName,
+        logoUrl: ctx.logoUrl,
+        copyright: ctx.copyright,
+        websiteUrl: ctx.websiteUrl,
+        customerName: 'Alex',
+        productTitle: 'Wellness Guide PDF',
+        fileName: 'wellness-guide.pdf',
+        fileType: 'pdf',
+        price: 499,
+        downloadUrl: `${ctx.websiteUrl}/digital-products/sample/download`,
+        orderId: 'DIG-12345',
+      });
     } else {
       return res.status(400).json({ message: 'Invalid preview type' });
     }
 
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.send(html);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/blogs/cover-image', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'No image uploaded' });
+    const result = await uploadMedia(req.file, { resourceType: 'image', localSubdir: 'blog' });
+    res.json({ url: result.url, publicId: result.publicId });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

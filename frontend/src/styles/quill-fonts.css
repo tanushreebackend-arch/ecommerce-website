@@ -1,0 +1,28 @@
+/* Blog content — Quill font classes on frontend */
+.ql-font-cormorant-garamond { font-family: 'Cormorant Garamond', serif; }
+.ql-font-playfair-display { font-family: 'Playfair Display', serif; }
+.ql-font-lora { font-family: 'Lora', serif; }
+.ql-font-merriweather { font-family: 'Merriweather', serif; }
+.ql-font-eb-garamond { font-family: 'EB Garamond', serif; }
+.ql-font-libre-baskerville { font-family: 'Libre Baskerville', serif; }
+.ql-font-crimson-text { font-family: 'Crimson Text', serif; }
+.ql-font-dm-serif-display { font-family: 'DM Serif Display', serif; }
+.ql-font-montserrat { font-family: 'Montserrat', sans-serif; }
+.ql-font-raleway { font-family: 'Raleway', sans-serif; }
+.ql-font-nunito { font-family: 'Nunito', sans-serif; }
+.ql-font-poppins { font-family: 'Poppins', sans-serif; }
+.ql-font-inter { font-family: 'Inter', sans-serif; }
+.ql-font-jost { font-family: 'Jost', sans-serif; }
+.ql-font-dm-sans { font-family: 'DM Sans', sans-serif; }
+.ql-font-josefin-sans { font-family: 'Josefin Sans', sans-serif; }
+.ql-font-outfit { font-family: 'Outfit', sans-serif; }
+.ql-font-syne { font-family: 'Syne', sans-serif; }
+.ql-font-tenor-sans { font-family: 'Tenor Sans', sans-serif; }
+.ql-font-spectral { font-family: 'Spectral', serif; }
+
+.ql-size-small { font-size: 0.75em; }
+.ql-size-large { font-size: 1.25em; }
+.ql-size-huge { font-size: 2em; }
+
+.quill-content img { max-width: 100%; height: auto; border-radius: 4px; }
+.quill-content blockquote { border-left: 3px solid var(--color-heading); padding-left: 1rem; margin: 1.5rem 0; font-style: italic; }

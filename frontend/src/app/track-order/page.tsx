@@ -41,7 +41,7 @@ function TrackOrderContent() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-center mb-8">Track Your Order</h1>
+      <h1 className="page-heading text-center mb-8">Track Your Order</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-10">
         <input placeholder="Order ID" required value={orderId} onChange={(e) => setOrderId(e.target.value)}
@@ -53,21 +53,21 @@ function TrackOrderContent() {
         </button>
       </form>
 
-      {error && <p className="text-red-500 text-center mb-6">{error}</p>}
+      {error && <p className="text-[#0A0A0A] text-center mb-6">{error}</p>}
 
       {order && (
-        <div className="bg-gray-50 rounded-2xl p-6">
-          <p className="font-bold mb-1">Order #{order.orderId as string}</p>
-          <p className="text-sm text-gray-500 mb-6">Total: ₹{(order.total as number)?.toLocaleString('en-IN')}</p>
+        <div className="bg-[#F5F5F5] rounded-2xl p-6">
+          <p className="font-medium mb-1">Order #{order.orderId as string}</p>
+          <p className="text-sm text-[#999999] mb-6">Total: ₹{(order.total as number)?.toLocaleString('en-IN')}</p>
 
           <div className="space-y-4">
             {STATUS_STEPS.map((step, i) => {
               const isComplete = i <= currentStep;
               const isCurrent = i === currentStep;
               return (
-                <div key={step} className={`flex items-center gap-3 ${isComplete ? 'text-green-600' : 'text-gray-400'}`}>
+                <div key={step} className={`flex items-center gap-3 ${isComplete ? 'text-[var(--color-heading)]' : 'text-[#999999]'}`}>
                   {isComplete ? <CheckCircle size={20} /> : <Circle size={20} />}
-                  <span className={`font-medium ${isCurrent ? 'font-bold' : ''}`}>{STATUS_LABELS[step]}</span>
+                  <span className={`font-normal ${isCurrent ? 'font-medium' : ''}`}>{STATUS_LABELS[step]}</span>
                 </div>
               );
             })}

@@ -24,20 +24,20 @@ export default function FaqAccordion({ items, compact = false, defaultOpen = nul
         return (
           <div
             key={index}
-            className={`bg-white rounded-xl border border-gray-200 overflow-hidden ${compact ? 'shadow-none' : 'shadow-sm'}`}
+            className={`bg-white rounded-xl border border-[#E8E8E8] overflow-hidden ${compact ? 'shadow-none' : 'shadow-sm'}`}
           >
             <button
               type="button"
               onClick={() => setOpenIndex(isOpen ? null : index)}
-              className={`w-full flex items-center justify-between gap-3 text-left hover:bg-gray-50/80 transition-colors ${
+              className={`w-full flex items-center justify-between gap-3 text-left hover:bg-[#F5F5F5]/80 transition-colors ${
                 compact ? 'px-3 py-3' : 'px-5 py-4'
               }`}
               aria-expanded={isOpen}
             >
-              <span className={`font-body font-semibold text-gray-900 pr-2 ${compact ? 'text-sm' : 'text-[15px]'}`}>
+                <span className={`font-body font-normal pr-2 ${compact ? 'text-sm' : 'text-sm'}`}>
                 {item.question}
               </span>
-              <span className="shrink-0 w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-brand">
+              <span className="shrink-0 w-7 h-7 rounded-full border border-[#E8E8E8] flex items-center justify-center text-brand">
                 {isOpen ? <Minus size={14} /> : <Plus size={14} />}
               </span>
             </button>
@@ -48,7 +48,7 @@ export default function FaqAccordion({ items, compact = false, defaultOpen = nul
             >
               <div className="overflow-hidden">
                 <p
-                  className={`text-gray-600 leading-relaxed font-body border-t border-gray-100 ${
+                  className={`text-[#555555] leading-relaxed font-body border-t border-[#E8E8E8] ${
                     compact ? 'px-3 pb-3 pt-2 text-xs' : 'px-5 pb-5 pt-4 text-sm'
                   }`}
                 >

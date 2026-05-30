@@ -36,32 +36,32 @@ export default function AccountPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold">My Account</h1>
-        <button onClick={handleLogout} className="text-sm text-red-500 hover:underline">Logout</button>
+        <h1 className="page-heading">My Account</h1>
+        <button onClick={handleLogout} className="text-sm text-[#555555] hover:underline">Logout</button>
       </div>
 
-      <div className="bg-gray-50 rounded-2xl p-6 mb-8">
-        <h2 className="font-semibold mb-2">Profile</h2>
+      <div className="bg-[#F5F5F5] rounded-2xl p-6 mb-8">
+        <h2 className="section-label mb-2">Profile</h2>
         <p>{user.firstName} {user.lastName}</p>
-        <p className="text-gray-500 text-sm">{user.email}</p>
+        <p className="text-[#999999] text-sm">{user.email}</p>
       </div>
 
-      <div className="bg-gray-50 rounded-2xl p-6 mb-8">
-        <h2 className="font-semibold mb-4">Saved Addresses</h2>
+      <div className="bg-[#F5F5F5] rounded-2xl p-6 mb-8">
+        <h2 className="section-label mb-4">Saved Addresses</h2>
         {user.addresses?.length > 0 ? (
           user.addresses.map((addr, i) => (
-            <div key={i} className="text-sm text-gray-600 mb-2">
+            <div key={i} className="text-sm text-[#555555] mb-2">
               {addr.address}, {addr.city}, {addr.state} {addr.pinCode}
             </div>
           ))
         ) : (
-          <p className="text-sm text-gray-500">No saved addresses yet.</p>
+          <p className="text-sm text-[#999999]">No saved addresses yet.</p>
         )}
       </div>
 
-      <div className="bg-gray-50 rounded-2xl p-6">
-        <h2 className="font-semibold mb-4">Order History</h2>
-        <p className="text-sm text-gray-500">
+      <div className="bg-[#F5F5F5] rounded-2xl p-6">
+        <h2 className="section-label mb-4">Order History</h2>
+        <p className="text-sm text-[#999999]">
           <a href="/track-order" className="underline">Track an order</a> using your order ID and email.
         </p>
       </div>

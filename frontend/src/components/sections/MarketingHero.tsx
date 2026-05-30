@@ -17,7 +17,7 @@ export default function MarketingHero() {
   const heroImage = images[0]?.url;
 
   return (
-    <section className="section-padding luxury-section-cream luxury-texture pt-10 md:pt-14 pb-16 md:pb-20">
+    <section className="section-padding luxury-section-white luxury-texture">
       <div className="container-main">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
           <div>
@@ -27,31 +27,28 @@ export default function MarketingHero() {
                   <Star
                     key={i}
                     size={14}
-                    className={i < Math.floor(rating) ? 'star-gold' : 'text-[var(--color-card-border)]'}
+                    className={i < Math.floor(rating) ? 'star-fill' : 'text-[var(--color-card-border)]'}
                   />
                 ))}
               </div>
-              <span className="text-[11px] font-bold tracking-[0.2em] text-gray-700 uppercase font-body">
+              <span className="text-[11px] font-normal tracking-[0.2em] text-[var(--color-text-secondary)] uppercase font-body">
                 {rating} Stars from 400+ reviews
               </span>
             </div>
 
-            <h1 className="font-heading text-[1.75rem] sm:text-4xl md:text-[2.65rem] lg:text-[2.85rem] font-bold leading-[1.12] tracking-wide text-gray-900 mb-4 uppercase">
+            <h1 className="font-heading text-xl sm:text-[22px] md:text-[28px] font-normal leading-snug tracking-wide text-[var(--color-heading)] mb-4 uppercase">
               You&apos;re not tired, burned out, or lazy
             </h1>
 
-            <p className="font-heading text-[1.75rem] sm:text-4xl md:text-[2.65rem] lg:text-[2.85rem] font-bold leading-[1.12] tracking-wide text-gray-900 mb-6 uppercase relative inline-block">
+            <p className="font-heading text-xl sm:text-[22px] md:text-[28px] font-normal leading-snug tracking-wide text-[var(--color-heading)] mb-6 uppercase relative inline-block">
               You need balance.
-              <span
-                className="absolute left-0 -bottom-1 h-[5px] w-full rounded-sm"
-                style={{ backgroundColor: 'var(--color-primary)' }}
-              />
+              <span className="absolute left-0 -bottom-1 h-[2px] w-[40px] bg-[var(--color-heading)]" />
             </p>
 
-            <p className="text-[15px] md:text-base text-gray-900 leading-relaxed font-body mb-3 max-w-xl">
-              <strong>{brandName} restores what your body has been missing.</strong>
+            <p className="text-sm text-[var(--color-heading)] leading-[1.7] font-body mb-3 max-w-xl">
+              <strong className="font-medium">{brandName} restores what your body has been missing.</strong>
             </p>
-            <p className="text-[15px] md:text-base text-gray-700 leading-relaxed font-body mb-8 max-w-xl">
+            <p className="text-sm text-[var(--color-text)] leading-[1.7] font-body mb-8 max-w-xl">
               With stabilized S-Adenosyl-L-Methionine, {brandName} {productLabel} supports mood, nervous system health,
               and joint comfort — your shortcut to emotional balance, mental clarity, and comfortable movement in 30 days.*
             </p>
@@ -79,7 +76,7 @@ export default function MarketingHero() {
                   unoptimized={heroImage.startsWith('http://localhost')}
                 />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-[#f5f5f0] text-gray-400 font-body text-sm border border-[var(--color-card-border)]">
+                <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-[#F5F5F5] text-[#999999] font-body text-sm border border-[var(--color-card-border)]">
                   Product image
                 </div>
               )}

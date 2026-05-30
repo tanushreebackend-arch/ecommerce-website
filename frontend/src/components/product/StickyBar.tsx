@@ -59,7 +59,7 @@ export default function StickyBar() {
             <div className="min-w-0">
               <p className="font-heading text-sm md:text-base truncate text-[var(--color-heading)]">{product.name as string}</p>
               <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                <span className="sticky-price text-lg">₹{currentPack.price.toLocaleString('en-IN')}</span>
+                <span className="sticky-price">₹{currentPack.price.toLocaleString('en-IN')}</span>
                 <span className="text-xs text-[var(--color-text-secondary)] line-through font-body font-light">
                   ₹{currentPack.originalPrice.toLocaleString('en-IN')}
                 </span>

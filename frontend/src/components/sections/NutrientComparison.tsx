@@ -81,10 +81,10 @@ const DEFAULT_COMPETITOR_IMAGES: Record<string, string> = {
 function FoodImage({ src, label }: { src: string; label: string }) {
   return (
     <div className="flex flex-col items-center gap-1.5">
-      <div className="relative w-20 h-20 rounded-full overflow-hidden border-[3px] border-white shadow-md ring-1 ring-gray-200">
+      <div className="relative w-20 h-20 rounded-full overflow-hidden border-[3px] border-white shadow-md ring-1 ring-[#E8E8E8]">
         <Image src={src} alt={label} fill className="object-cover" sizes="80px" quality={100} unoptimized={src.startsWith('http://localhost')} />
       </div>
-      <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide font-body">{label}</span>
+      <span className="text-[10px] font-normal text-[#999999] uppercase tracking-wide font-body">{label}</span>
     </div>
   );
 }
@@ -112,34 +112,34 @@ export default function NutrientComparison() {
       'Here\'s why NOW Foods SAMe 400 mg stands out — stabilized, maximum-strength SAMe your body actually uses.*';
 
   return (
-    <section className="section-padding luxury-section-cream luxury-texture">
+    <section className="section-padding luxury-section-white luxury-texture">
       <ScrollReveal>
         <div className="container-main">
           <SectionHeading label="NUTRITION COMPARISON" subheading={intro}>
             {heading}
           </SectionHeading>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {cards.map((card, i) => {
               const competitorSrc = (card as { competitorImage?: string }).competitorImage || DEFAULT_COMPETITOR_IMAGES[card.nutrient] || DEFAULT_PRODUCT_IMG;
               const competitorLabel = card.competitorLabel || COMPETITOR_LABELS[card.nutrient] || 'Food';
 
               return (
-                <div key={i} className="luxury-card overflow-hidden">
-                  <div className="bg-[var(--color-primary)] px-4 py-3">
-                    <h3 className="font-heading text-lg text-[var(--color-primary-foreground)]">{card.nutrient}</h3>
+                <div key={i} className="comparison-card">
+                  <div className="bg-[var(--button-color)] px-4 py-3">
+                    <h3 className="font-heading text-base font-normal text-white">{card.nutrient}</h3>
                   </div>
-                  <div className="p-6 text-center">
+                  <div className="comparison-card-body p-6 text-center">
                     <div className="flex items-center justify-center gap-5 mb-4">
                       <FoodImage src={productImage} label="Ours" />
-                      <span className="font-heading font-bold text-gray-400 text-base tracking-wider">VS</span>
+                      <span className="font-heading font-normal text-sm text-[#999999] tracking-wider">VS</span>
                       <FoodImage src={competitorSrc} label={competitorLabel} />
                     </div>
-                    <p className="font-body text-[11px] font-medium text-[var(--color-secondary)] uppercase tracking-[3px] mb-4 leading-snug">
+                    <p className="font-body text-[11px] font-normal text-[#0A0A0A] uppercase tracking-[2px] mb-4 leading-snug">
                       {card.claim}
                     </p>
                     <ul className="space-y-2 text-center">
                       {card.benefits.map((b, j) => (
-                        <li key={j} className="text-sm font-body border-b border-gray-50 pb-2 last:border-0" style={{ color: 'var(--color-text)' }}>
+                        <li key={j} className="text-sm font-body border-b border-[#E8E8E8] pb-2 last:border-0 text-[#555555]">
                           {b}
                         </li>
                       ))}

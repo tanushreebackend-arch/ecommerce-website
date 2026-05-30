@@ -1,5 +1,6 @@
 const getEmailBrandContext = require('./getEmailBrandContext');
 const { sendEmail } = require('./sendEmail');
+const { applyEmailVars } = require('./emailVars');
 const {
   welcomeEmailTemplate,
   orderConfirmationTemplate,
@@ -18,23 +19,39 @@ function formatPaymentMethod(method) {
 
 async function sendWelcomeEmail(user) {
   const ctx = await getEmailBrandContext();
-  if (!ctx.emailSettings.welcomeEnabled) return { skipped: true };
+  if (!ctx.emailSettings.welcomeEnabled) {
+    console.log('[email] Welcome email skipped — disabled in settings');
+    return { skipped: true };
+  }
 
   const name = user.firstName || user.name || 'there';
+  const vars = { storeName: ctx.storeName, name };
   const html = welcomeEmailTemplate({
     name,
-    brandName: ctx.brandName,
+    brandName: ctx.storeName,
     logoUrl: ctx.logoUrl,
     websiteUrl: ctx.websiteUrl,
     copyright: ctx.copyright,
     ctaText: ctx.emailSettings.welcomeCtaText,
+    bodyContent: applyEmailVars(ctx.emailSettings.welcomeBodyText, vars),
   });
 
-  return sendEmail({
+  const subject = applyEmailVars(
+    ctx.emailSettings.welcomeSubject || 'Welcome to {storeName}',
+    vars
+  );
+
+  const result = await sendEmail({
     to: user.email,
-    subject: `Welcome to ${ctx.brandName}`,
+    subject,
     html,
   });
+
+  if (result?.skipped) {
+    console.log('[email] Welcome email skipped — email transporter not configured');
+  }
+
+  return result;
 }
 
 async function sendOrderConfirmationEmail(order) {
@@ -74,7 +91,7 @@ async function sendOrderConfirmationEmail(order) {
       city: addr.city,
       pincode: addr.pinCode,
     },
-    brandName: ctx.brandName,
+    brandName: ctx.storeName,
     logoUrl: ctx.logoUrl,
     trackOrderUrl: `${ctx.websiteUrl}/track-order`,
     websiteUrl: ctx.websiteUrl,
@@ -85,9 +102,16 @@ async function sendOrderConfirmationEmail(order) {
   const email = order.customerEmail;
   if (!email) return { skipped: true };
 
+  const orderId = order.orderId || order._id;
+  const subjectBase = applyEmailVars(
+    ctx.emailSettings.orderConfirmationSubject || 'Order Confirmed',
+    { storeName: ctx.storeName }
+  );
+  const subject = `${subjectBase} #${orderId}`;
+
   return sendEmail({
     to: email,
-    subject: `${ctx.brandName} — Order confirmed #${order.orderId || order._id}`,
+    subject,
     html,
   });
 }
@@ -97,10 +121,11 @@ async function sendAbandonedCartEmail(user, cartItems, stockLeft = 5) {
   if (!ctx.emailSettings.abandonedCartEnabled) return { skipped: true };
 
   const name = user.firstName || user.name || 'there';
+  const vars = { storeName: ctx.storeName, name, productName: ctx.productName };
   const html = abandonedCartTemplate({
     name,
     cartItems,
-    brandName: ctx.brandName,
+    brandName: ctx.storeName,
     logoUrl: ctx.logoUrl,
     checkoutUrl: `${ctx.websiteUrl}/checkout`,
     websiteUrl: ctx.websiteUrl,
@@ -108,11 +133,17 @@ async function sendAbandonedCartEmail(user, cartItems, stockLeft = 5) {
     stockLeft,
     urgencyText: ctx.emailSettings.abandonedCartUrgencyText,
     ctaText: ctx.emailSettings.abandonedCartCtaText,
+    bodyContent: applyEmailVars(ctx.emailSettings.abandonedCartBodyText, vars),
   });
+
+  const subject = applyEmailVars(
+    ctx.emailSettings.abandonedCartSubject || 'You left something behind',
+    vars
+  );
 
   return sendEmail({
     to: user.email,
-    subject: `${name}, your cart is waiting`,
+    subject,
     html,
   });
 }

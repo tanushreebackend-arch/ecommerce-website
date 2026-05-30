@@ -5,11 +5,17 @@ import { adminApi } from '@/lib/api';
 import toast from 'react-hot-toast';
 
 type EmailSettings = {
+  storeName: string;
   welcomeEnabled: boolean;
   orderConfirmationEnabled: boolean;
   abandonedCartEnabled: boolean;
   abandonedCartDelayHours: number;
   abandonedCartUrgencyText: string;
+  welcomeSubject: string;
+  welcomeBodyText: string;
+  orderConfirmationSubject: string;
+  abandonedCartSubject: string;
+  abandonedCartBodyText: string;
   welcomeCtaText: string;
   orderCtaText: string;
   abandonedCartCtaText: string;
@@ -78,7 +84,7 @@ export default function EmailsPage() {
     try {
       const updated = await adminApi.updateEmailSettings(settings);
       setSettings(updated);
-      toast.success('Email settings saved');
+      toast.success('Settings saved successfully!');
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Save failed');
     } finally {
@@ -156,37 +162,112 @@ export default function EmailsPage() {
 
         <div className="card space-y-4">
           <h2 className="font-semibold">Email Copy & CTAs</h2>
+
           <div>
-            <label className="text-sm text-gray-500">Welcome CTA button</label>
+            <label className="text-sm text-gray-500">Store Name</label>
             <input
               className="input-field mt-1"
-              value={settings.welcomeCtaText}
-              onChange={(e) => setSettings({ ...settings, welcomeCtaText: e.target.value })}
+              value={settings.storeName}
+              onChange={(e) => setSettings({ ...settings, storeName: e.target.value })}
+              placeholder="NOW Foods"
             />
+            <p className="text-xs text-gray-400 mt-1">Used in email headers and copy. Use {'{storeName}'} in subject/body fields.</p>
           </div>
-          <div>
-            <label className="text-sm text-gray-500">Order confirmation CTA button</label>
-            <input
-              className="input-field mt-1"
-              value={settings.orderCtaText}
-              onChange={(e) => setSettings({ ...settings, orderCtaText: e.target.value })}
-            />
+
+          <div className="border-t border-gray-100 pt-4">
+            <p className="text-sm font-medium text-gray-700 mb-3">Welcome email</p>
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm text-gray-500">Subject line</label>
+                <input
+                  className="input-field mt-1"
+                  value={settings.welcomeSubject}
+                  onChange={(e) => setSettings({ ...settings, welcomeSubject: e.target.value })}
+                  placeholder="Welcome to {storeName}"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-500">Body text</label>
+                <textarea
+                  className="input-field mt-1 min-h-[100px]"
+                  value={settings.welcomeBodyText}
+                  onChange={(e) => setSettings({ ...settings, welcomeBodyText: e.target.value })}
+                  placeholder="Thank you for joining {storeName}..."
+                />
+              </div>
+            </div>
           </div>
-          <div>
-            <label className="text-sm text-gray-500">Abandoned cart CTA button</label>
-            <input
-              className="input-field mt-1"
-              value={settings.abandonedCartCtaText}
-              onChange={(e) => setSettings({ ...settings, abandonedCartCtaText: e.target.value })}
-            />
+
+          <div className="border-t border-gray-100 pt-4">
+            <p className="text-sm font-medium text-gray-700 mb-3">Order confirmation</p>
+            <div>
+              <label className="text-sm text-gray-500">Subject line</label>
+              <input
+                className="input-field mt-1"
+                value={settings.orderConfirmationSubject}
+                onChange={(e) => setSettings({ ...settings, orderConfirmationSubject: e.target.value })}
+                placeholder="Order Confirmed"
+              />
+            </div>
           </div>
-          <div>
-            <label className="text-sm text-gray-500">Abandoned cart urgency text (use X for stock count)</label>
-            <textarea
-              className="input-field mt-1 min-h-[80px]"
-              value={settings.abandonedCartUrgencyText}
-              onChange={(e) => setSettings({ ...settings, abandonedCartUrgencyText: e.target.value })}
-            />
+
+          <div className="border-t border-gray-100 pt-4">
+            <p className="text-sm font-medium text-gray-700 mb-3">Abandoned cart</p>
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm text-gray-500">Subject line</label>
+                <input
+                  className="input-field mt-1"
+                  value={settings.abandonedCartSubject}
+                  onChange={(e) => setSettings({ ...settings, abandonedCartSubject: e.target.value })}
+                  placeholder="You left something behind"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-500">Body text</label>
+                <textarea
+                  className="input-field mt-1 min-h-[100px]"
+                  value={settings.abandonedCartBodyText}
+                  onChange={(e) => setSettings({ ...settings, abandonedCartBodyText: e.target.value })}
+                  placeholder="You left a few items in your cart..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-100 pt-4 space-y-4">
+            <div>
+              <label className="text-sm text-gray-500">Welcome CTA button</label>
+              <input
+                className="input-field mt-1"
+                value={settings.welcomeCtaText}
+                onChange={(e) => setSettings({ ...settings, welcomeCtaText: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="text-sm text-gray-500">Order confirmation CTA button</label>
+              <input
+                className="input-field mt-1"
+                value={settings.orderCtaText}
+                onChange={(e) => setSettings({ ...settings, orderCtaText: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="text-sm text-gray-500">Abandoned cart CTA button</label>
+              <input
+                className="input-field mt-1"
+                value={settings.abandonedCartCtaText}
+                onChange={(e) => setSettings({ ...settings, abandonedCartCtaText: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="text-sm text-gray-500">Abandoned cart urgency text (use X for stock count)</label>
+              <textarea
+                className="input-field mt-1 min-h-[80px]"
+                value={settings.abandonedCartUrgencyText}
+                onChange={(e) => setSettings({ ...settings, abandonedCartUrgencyText: e.target.value })}
+              />
+            </div>
           </div>
         </div>
       </div>

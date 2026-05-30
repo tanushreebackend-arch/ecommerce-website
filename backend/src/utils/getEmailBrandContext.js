@@ -12,13 +12,19 @@ async function getEmailBrandContext() {
   ]);
 
   const websiteUrl = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
-  const brandName = String(
-    product?.brandName || navbar?.content?.brandName || process.env.EMAIL_FROM_NAME || 'NOW FOODS'
-  ).toUpperCase();
+  const storeName =
+    emailSettings.storeName ||
+    product?.brandName ||
+    navbar?.content?.brandName ||
+    process.env.EMAIL_FROM_NAME ||
+    'NOW Foods';
 
   let logoUrl = navbar?.content?.logoUrl || product?.logo?.url || '';
   if (logoUrl && logoUrl.startsWith('/')) {
-    const apiBase = (process.env.API_PUBLIC_URL || process.env.FRONTEND_URL || 'http://localhost:5000').replace(/\/$/, '');
+    const apiBase = (process.env.API_PUBLIC_URL || process.env.FRONTEND_URL || 'http://localhost:5000').replace(
+      /\/$/,
+      ''
+    );
     logoUrl = `${apiBase}${logoUrl}`;
   }
 
@@ -27,10 +33,12 @@ async function getEmailBrandContext() {
   const footerBg = theme?.footerBg || brandColor;
   const footer = await Section.findOne({ name: 'footer' }).lean();
   const copyright =
-    footer?.content?.copyright || `© ${new Date().getFullYear()} ${brandName}. All rights reserved.`;
+    footer?.content?.copyright || `© ${new Date().getFullYear()} ${storeName}. All rights reserved.`;
 
   return {
-    brandName,
+    storeName,
+    brandName: storeName,
+    productName: product?.name || 'your product',
     brandColor,
     bannerColor,
     footerBg,

@@ -41,7 +41,17 @@ router.post(
       );
 
       res.cookie('userToken', token, cookieOptions);
-      sendWelcomeEmail(user).catch((err) => console.error('[email] Welcome email failed:', err.message));
+
+      try {
+        console.log('Sending welcome email to:', user.email);
+        console.log('EMAIL_USER:', process.env.EMAIL_USER);
+        console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS);
+        await sendWelcomeEmail(user);
+        console.log('Welcome email sent!');
+      } catch (error) {
+        console.log('Email error:', error.message);
+      }
+
       res.status(201).json({
         message: 'Account created',
         user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email },

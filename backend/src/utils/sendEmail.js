@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { getEmailSettings } = require('./emailSettings');
 
 let transporter;
 
@@ -28,7 +29,8 @@ async function sendEmail({ to, subject, html }) {
     return { skipped: true };
   }
 
-  const fromName = process.env.EMAIL_FROM_NAME || 'NOW FOODS';
+  const settings = await getEmailSettings();
+  const fromName = settings.storeName || process.env.EMAIL_FROM_NAME || 'NOW Foods';
   const fromEmail = process.env.EMAIL_USER;
 
   const info = await transport.sendMail({

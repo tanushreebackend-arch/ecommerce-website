@@ -88,6 +88,8 @@ export const adminApi = {
   markEnquiryRead: (id: string, isRead: boolean) =>
     fetchAPI(`/api/admin/enquiries/${id}/read`, { method: 'PUT', body: JSON.stringify({ isRead }) }),
   deleteEnquiry: (id: string) => fetchAPI(`/api/admin/enquiries/${id}`, { method: 'DELETE' }),
+  replyEnquiry: (id: string, replyMessage: string) =>
+    fetchAPI(`/api/admin/enquiries/${id}/reply`, { method: 'POST', body: JSON.stringify({ replyMessage }) }),
   getOrders: () => fetchAPI('/api/admin/orders'),
   getOrder: (id: string) => fetchAPI(`/api/admin/orders/${id}`),
   updateOrderStatus: (id: string, data: object) =>

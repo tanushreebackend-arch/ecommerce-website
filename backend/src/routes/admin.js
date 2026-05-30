@@ -15,6 +15,7 @@ const Settings = require('../models/Settings');
 const { authAdmin } = require('../middleware/auth');
 const { getEmailSettings, saveEmailSettings } = require('../utils/emailSettings');
 const getEmailBrandContext = require('../utils/getEmailBrandContext');
+const { applyEmailVars } = require('../utils/emailVars');
 const {
   welcomeEmailTemplate,
   orderConfirmationTemplate,
@@ -23,6 +24,7 @@ const {
 } = require('../utils/emailTemplates');
 const upload = require('../middleware/upload');
 const { uploadMedia, deleteMediaFile } = require('../utils/fileUpload');
+const { sendEmail } = require('../utils/sendEmail');
 
 const router = express.Router();
 
@@ -91,7 +93,7 @@ router.get('/dashboard/stats', async (req, res) => {
         { $group: { _id: null, total: { $sum: '$total' } } },
       ]),
       Review.countDocuments({ status: 'pending' }),
-      Enquiry.countDocuments({ isRead: false }),
+      Enquiry.countDocuments({ $or: [{ status: 'unread' }, { status: { $exists: false }, isRead: false }] }),
       User.countDocuments(),
       Product.countDocuments(),
       Order.countDocuments(),
@@ -627,7 +629,52 @@ router.get('/enquiries', async (req, res) => {
 
 router.put('/enquiries/:id/read', async (req, res) => {
   try {
-    const enquiry = await Enquiry.findByIdAndUpdate(req.params.id, { isRead: req.body.isRead }, { new: true });
+    const enquiry = await Enquiry.findById(req.params.id);
+    if (!enquiry) return res.status(404).json({ message: 'Enquiry not found' });
+
+    if (enquiry.status !== 'replied') {
+      enquiry.isRead = true;
+      enquiry.status = 'read';
+      await enquiry.save();
+    }
+
+    res.json(enquiry);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/enquiries/:id/reply', async (req, res) => {
+  try {
+    const { replyMessage } = req.body;
+    if (!replyMessage || !String(replyMessage).trim()) {
+      return res.status(400).json({ message: 'Reply message is required' });
+    }
+
+    const enquiry = await Enquiry.findById(req.params.id);
+    if (!enquiry) return res.status(404).json({ message: 'Enquiry not found' });
+
+    const messageHtml = String(replyMessage)
+      .trim()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>');
+
+    await sendEmail({
+      to: enquiry.email,
+      subject: 'Re: Your Enquiry — NOW Foods',
+      html: `
+        <p>Hi ${enquiry.name},</p>
+        <p>${messageHtml}</p>
+        <p style="color:#666;font-size:13px;margin-top:24px;">— NOW Foods Customer Support</p>
+      `,
+    });
+
+    enquiry.status = 'replied';
+    enquiry.isRead = true;
+    await enquiry.save();
+
     res.json(enquiry);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -794,11 +841,15 @@ router.get('/emails/preview/:type', async (req, res) => {
     if (type === 'welcome') {
       html = welcomeEmailTemplate({
         name: 'Alex',
-        brandName: ctx.brandName,
+        brandName: ctx.storeName,
         logoUrl: ctx.logoUrl,
         websiteUrl: ctx.websiteUrl,
         copyright: ctx.copyright,
         ctaText: ctx.emailSettings.welcomeCtaText,
+        bodyContent: applyEmailVars(ctx.emailSettings.welcomeBodyText, {
+          storeName: ctx.storeName,
+          name: 'Alex',
+        }),
       });
     } else if (type === 'order') {
       html = orderConfirmationTemplate({
@@ -806,8 +857,8 @@ router.get('/emails/preview/:type', async (req, res) => {
         orderId: 'ORD-12345',
         date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
         items: [
-          { name: 'NOW Foods SAMe 400 mg', packLabel: '60 Tablets', quantity: 1, price: 2499 },
-          { name: 'NOW Foods SAMe 400 mg', packLabel: '120 Tablets', quantity: 2, price: 4499 },
+          { name: ctx.productName, packLabel: '60 Tablets', quantity: 1, price: 2499 },
+          { name: ctx.productName, packLabel: '120 Tablets', quantity: 2, price: 4499 },
         ],
         subtotal: 11497,
         shipping: 0,
@@ -821,7 +872,7 @@ router.get('/emails/preview/:type', async (req, res) => {
           city: 'Bangalore',
           pincode: '560001',
         },
-        brandName: ctx.brandName,
+        brandName: ctx.storeName,
         logoUrl: ctx.logoUrl,
         trackOrderUrl: `${ctx.websiteUrl}/track-order`,
         websiteUrl: ctx.websiteUrl,
@@ -833,14 +884,14 @@ router.get('/emails/preview/:type', async (req, res) => {
         name: 'Alex',
         cartItems: [
           {
-            name: 'NOW Foods SAMe 400 mg',
+            name: ctx.productName,
             packLabel: '60 Tablets',
             price: 2499,
             quantity: 1,
             image: ctx.logoUrl,
           },
         ],
-        brandName: ctx.brandName,
+        brandName: ctx.storeName,
         logoUrl: ctx.logoUrl,
         checkoutUrl: `${ctx.websiteUrl}/checkout`,
         websiteUrl: ctx.websiteUrl,
@@ -848,10 +899,15 @@ router.get('/emails/preview/:type', async (req, res) => {
         stockLeft: 12,
         urgencyText: ctx.emailSettings.abandonedCartUrgencyText,
         ctaText: ctx.emailSettings.abandonedCartCtaText,
+        bodyContent: applyEmailVars(ctx.emailSettings.abandonedCartBodyText, {
+          storeName: ctx.storeName,
+          name: 'Alex',
+          productName: ctx.productName,
+        }),
       });
     } else if (type === 'digital') {
       html = digitalProductPurchaseTemplate({
-        brandName: ctx.brandName,
+        brandName: ctx.storeName,
         logoUrl: ctx.logoUrl,
         copyright: ctx.copyright,
         websiteUrl: ctx.websiteUrl,

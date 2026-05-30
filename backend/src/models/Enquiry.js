@@ -7,6 +7,7 @@ const enquirySchema = new mongoose.Schema(
     phone: String,
     message: { type: String, required: true },
     isRead: { type: Boolean, default: false },
+    status: { type: String, enum: ['unread', 'read', 'replied'], default: 'unread' },
   },
   { timestamps: true }
 );

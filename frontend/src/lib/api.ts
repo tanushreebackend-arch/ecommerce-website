@@ -1,13 +1,13 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 async function fetchAPI(endpoint: string, options: RequestInit = {}) {
+  const isFormData = options.body instanceof FormData;
   const res = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers: isFormData
+      ? { ...options.headers }
+      : { 'Content-Type': 'application/json', ...options.headers },
   });
 
   const data = await res.json().catch(() => ({}));
@@ -19,7 +19,10 @@ export const api = {
   getSettings: () => fetchAPI('/api/settings/all'),
   getTheme: () => fetchAPI('/api/theme'),
   getPublishedReviews: () => fetchAPI('/api/reviews/published'),
-  submitReview: (data: object) => fetchAPI('/api/reviews', { method: 'POST', body: JSON.stringify(data) }),
+  submitReview: (data: FormData | object) =>
+    data instanceof FormData
+      ? fetchAPI('/api/reviews', { method: 'POST', body: data })
+      : fetchAPI('/api/reviews', { method: 'POST', body: JSON.stringify(data) }),
   submitEnquiry: (data: object) => fetchAPI('/api/enquiries', { method: 'POST', body: JSON.stringify(data) }),
   validateCoupon: (code: string, orderTotal: number) =>
     fetchAPI('/api/coupons/validate', { method: 'POST', body: JSON.stringify({ code, orderTotal }) }),

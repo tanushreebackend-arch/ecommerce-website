@@ -8,6 +8,8 @@ const reviewSchema = new mongoose.Schema(
     title: { type: String, required: true },
     text: { type: String, required: true },
     photo: { url: String, publicId: String },
+    video: { url: String, publicId: String },
+    isVerifiedBuyer: { type: Boolean, default: true },
     status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
     isPinned: { type: Boolean, default: false },
   },

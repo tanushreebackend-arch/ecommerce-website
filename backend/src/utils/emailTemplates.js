@@ -101,12 +101,21 @@ function welcomeEmailTemplate({
   websiteUrl,
   copyright,
   ctaText = 'Shop Now',
+  bodyContent,
 }) {
+  const defaultParagraphs = [
+    `Thank you for joining ${escapeHtml(brandName)}. We're glad to have you.`,
+    'You can now track orders, save your address, and shop whenever you are ready.',
+  ];
+
+  const paragraphs = bodyContent
+    ? bodyContent.split(/\n\n+/).filter(Boolean)
+    : defaultParagraphs;
+
   const bodyHtml = `
     ${heading('Welcome')}
     ${bodyText(`Hi ${escapeHtml(name)},`)}
-    ${bodyText(`Thank you for joining ${escapeHtml(brandName)}. We're glad to have you.`)}
-    ${bodyText('You can now track orders, save your address, and shop whenever you are ready.')}
+    ${paragraphs.map((p) => bodyText(escapeHtml(p))).join('')}
     ${ctaButton({ href: websiteUrl, text: ctaText })}
   `;
 
@@ -211,6 +220,7 @@ function abandonedCartTemplate({
   stockLeft,
   urgencyText,
   ctaText = 'Complete purchase',
+  bodyContent,
 }) {
   const urgency = (urgencyText || '').replace(/X/g, String(stockLeft ?? 'a few'));
 
@@ -226,10 +236,13 @@ function abandonedCartTemplate({
     )
     .join('');
 
+  const introParagraphs = bodyContent
+    ? bodyContent.split(/\n\n+/).filter(Boolean).map((p) => bodyText(escapeHtml(p))).join('')
+    : `${bodyText(`Hi ${escapeHtml(name)},`)}${bodyText('You left a few items in your cart. They are still reserved for you when you are ready to checkout.')}`;
+
   const bodyHtml = `
     ${heading('Your cart is waiting')}
-    ${bodyText(`Hi ${escapeHtml(name)},`)}
-    ${bodyText('You left a few items in your cart. They are still reserved for you when you are ready to checkout.')}
+    ${introParagraphs}
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:8px 0 24px;border-collapse:collapse;">
       ${itemRows}
     </table>
